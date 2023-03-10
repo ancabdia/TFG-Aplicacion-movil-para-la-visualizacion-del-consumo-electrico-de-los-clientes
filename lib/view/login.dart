@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:encrypto_flutter/encrypto_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:http/http.dart' as http;
@@ -7,7 +8,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:convert';
 
-import 'package:tfgproyecto/main.dart';
+import 'package:tfgproyecto/view/profile.dart';
 
 import '../API/db.dart';
 import '../model/User.dart';
@@ -20,9 +21,13 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   Duration get loginTime => const Duration(milliseconds: 2000);
+  late Encrypto encrypto;
+  late var publicKey;
 
   @override
   void initState(){
+    encrypto = Encrypto(Encrypto.RSA, bitLength: 128);
+    publicKey = encrypto.sterilizePublicKey();
     super.initState();
   }
 
@@ -32,13 +37,38 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<String?> _signInUser(LoginData data) async {
-    
+    Database database = await DB.openDB();
+    var list = await database.rawQuery("SELECT * FROM users WHERE email = '${data.name}' AND password = '${data.password}';");
+
+    if(list.isNotEmpty) {
+      User user = User.fromArray(list.first);
+      // Obtain shared preferences.
+      final prefs = await SharedPreferences.getInstance();
+
+
+      print(user);
+    } else{
+      return Future.delayed(loginTime).then((_) {
+        return 'Error code: usuario no es correcto';
+      });
+    }
   }
 
   Future<String?> _signupUser(SignupData data) async{
-   User user = User.complete(data.name!, data.password!, data.additionalSignupData!['name'], data.additionalSignupData!['surname'], data.additionalSignupData!['nif'], data.additionalSignupData!['datadisPassword']);
+    Database database = await DB.openDB();
+    var list = await database.rawQuery("SELECT * FROM users WHERE email = '${data.name}' AND password = '${data.password}';");
 
-   DB.insert(user);
+    if(list.isEmpty){
+      User user = User(email: data.name!, password: data.password!, name: data.additionalSignupData!['name']!, surname: data.additionalSignupData!['surname']!, nif: data.additionalSignupData!['nif']!, datadisPassword: data.additionalSignupData!['datadisPassword']!);
+
+      Database database = await DB.openDB();
+      database.insert("users", user.toMap());
+    }else{
+      debugPrint('Signup Name: ${data.name}, Password: ${data.password}');
+      return Future.delayed(loginTime).then((_) {
+        return 'Error code: DNI ${data.additionalSignupData!["nif"]!} ya registrado en el sistema';
+      });
+    }
   }
 
   Future<String?> _recoverPassword(String name) async{
@@ -84,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
           UserFormField(
               keyName: 'nif', icon: Icon(Icons.perm_identity), displayName: "NIF"),
           UserFormField(
-              keyName: 'pass', displayName: "Contraseña DataDis"
+              keyName: 'datadisPassword', displayName: "Contraseña DataDis"
           ),
 
           // UserFormField(
@@ -121,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
         onSubmitAnimationCompleted: () {
           Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) => const MyHomePage(title: 'pruba2'),
+            builder: (context) => ProfilePage(),
           ));
         },
         onLogin: _signInUser,

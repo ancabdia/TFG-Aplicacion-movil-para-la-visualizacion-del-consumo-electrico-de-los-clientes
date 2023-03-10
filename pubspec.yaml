@@ -40,6 +40,7 @@ dependencies:
   sqflite: ^2.2.5       #https://pub.dev/packages/sqflite/
   path: ^1.8.2
   encrypto_flutter: ^1.2.1
+  shared_preferences: ^2.0.18
 
 
 

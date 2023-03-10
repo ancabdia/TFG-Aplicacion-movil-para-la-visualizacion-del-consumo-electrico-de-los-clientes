@@ -1,17 +1,21 @@
 import 'Supply.dart';
 
 class User{
-  String email;
-  String password;
-  String? name;
-  String? surname;
-  String? nif;
-  String? datadisPassword;
+  final String email;
+  final String password;
+  final String name;
+  final String surname;
+  final String nif;
+  final String datadisPassword;
 
-  User.single(this.email, this.password);
-
-  User.complete(this.email, this.password, this.name, this.surname, this.nif,
-      this.datadisPassword);
+  User({
+    required this.email,
+    required this.password,
+    required this.name,
+    required this.surname,
+    required this.nif,
+    required this.datadisPassword,
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -23,4 +27,13 @@ class User{
       'datadisPassword' : datadisPassword
     };
   }
+
+  factory User.fromArray(Map<String, Object?> map) => User(
+    email: map['email'] as String,
+    password: map['password'] as String,
+    name: map['name'] as String,
+    surname: map['surname'] as String,
+    nif: map['nif'] as String,
+    datadisPassword: map['datadisPassword'] as String,
+  );
 }
