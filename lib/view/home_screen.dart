@@ -9,6 +9,7 @@ import 'package:charts_flutter/flutter.dart';
 import 'package:charts_flutter/src/text_style.dart' as style;
 import 'package:charts_flutter/src/text_element.dart' as element;
 import 'package:path/path.dart';
+import 'package:tfgproyecto/components/formatter.dart';
 import 'package:tfgproyecto/view/profile.dart';
 
 import '../API/API.dart';
@@ -76,16 +77,22 @@ class _HomePageState extends State<HomeScreenOld> {
                     ],
                   );
                 }),
-            Expanded(
-              child: _prices.isNotEmpty
-                  ? Container(child: _buildChart(context))
-                  : const CircularProgressIndicator(),
-            ),
+            _prices.isNotEmpty
+                ? Column(
+                  children: [
+                      Container(
+                      height: 300,
+                      margin: EdgeInsets.all(10),
+                      child: _buildChart(context)),
+                    ],
+                )
+                : const CircularProgressIndicator(),
           ],
         ),
       ),
     );
   }
+  
 
   Widget _buildChart(BuildContext context) {
     var data = [
@@ -98,7 +105,20 @@ class _HomePageState extends State<HomeScreenOld> {
       )
     ];
 
-    var value;
+  double getMaxValue(List<charts.Series<Price, int>> data) {
+    double maxValue = 0;
+    for (var series in data) {
+      for (var datum in series.data) {
+        if (datum.price > maxValue) {
+          maxValue = datum.price;
+        }
+      }
+    }
+    return maxValue;
+  }
+
+    dynamic price;
+    dynamic hour;
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -108,25 +128,33 @@ class _HomePageState extends State<HomeScreenOld> {
         defaultRenderer: charts.LineRendererConfig(includePoints: true),
         domainAxis: const charts.NumericAxisSpec(
           tickProviderSpec:
-              charts.BasicNumericTickProviderSpec(desiredTickCount: 24),
+              charts.BasicNumericTickProviderSpec(desiredTickCount: 12),
           viewport: charts.NumericExtents(0, 23),
         ),
         primaryMeasureAxis: charts.NumericAxisSpec(
-          tickProviderSpec: charts.BasicNumericTickProviderSpec(
-              desiredTickCount: _prices.length ~/ 4),
+          tickProviderSpec: 
+          const charts.BasicNumericTickProviderSpec(
+              desiredTickCount: 6,
+              dataIsInWholeNumbers: false,
+              zeroBound: false),
+          viewport: charts.NumericExtents(0, getMaxValue(data)),
         ),
         behaviors: [
+          ChartTitle('Precios ${DateTime.now().formatter()}',
+          ),
           charts.LinePointHighlighter(
             ////////////////////// notice ////////////////////////////
             symbolRenderer:
-                TextSymbolRenderer(() => value.toStringAsFixed(4), context),
+                TextSymbolRenderer(() => '${price.toStringAsFixed(4)}', context),
             ////////////////////// notice ////////////////////////////
           ),
         ],
         selectionModels: [
           SelectionModelConfig(changedListener: (SelectionModel model) {
             if (model.hasDatumSelection) {
-              value = (model.selectedSeries[0]
+              hour = ((model.selectedSeries[0]
+                  .domainFn(model.selectedDatum[0].index)));
+              price = (model.selectedSeries[0]
                   .measureFn(model.selectedDatum[0].index));
             }
           })
@@ -165,8 +193,6 @@ class TextSymbolRenderer extends CircleSymbolRenderer {
     textStyle.color = Color.black;
     textStyle.fontSize = 15;
 
-    // print(getText.call());
-
     element.TextElement textElement = element.TextElement(
         '${getText.call().padRight(3)} €/kWh',
         style: textStyle);
@@ -174,10 +200,11 @@ class TextSymbolRenderer extends CircleSymbolRenderer {
     double height = textElement.measurement.verticalSliceWidth;
 
     double centerX = MediaQuery.of(context).size.width / 2;
-    double centerY = bounds.top +
-        bounds.height / 2 -
-        marginBottom -
-        (padding.top + padding.bottom);
+    // double centerY = bounds.top +
+    //     bounds.height / 2 -
+    //     marginBottom -
+    //     (padding.top + padding.bottom);
+        double centerY = 300;
 
     canvas.drawRRect(
       Rectangle(
