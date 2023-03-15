@@ -4,9 +4,55 @@ import 'package:tfgproyecto/model/ContractDetail.dart';
 
 import '../model/Consumption.dart';
 import '../model/Power.dart';
+import '../model/Prices.dart';
 import '../model/Supply.dart';
 
 class API {
+  static Future<List<Price>> fetchPrices() async {
+    final response = await http
+        .get(Uri.parse('https://api.preciodelaluz.org/v1/prices/all?zone=PCB'));
+
+    if (response.statusCode == 200) {
+      final jsonMap = jsonDecode(response.body);
+      List<Price> prices = [];
+      jsonMap.forEach((key, value) {
+        prices.add(Price(
+            hour: value['hour'],
+            cheap: value['is-cheap'],
+            price: value['price']/1000));
+      });
+      return prices;
+    } else {
+      throw Exception('Failed to fetch prices');
+    }
+  }
+
+  static Future<Price> fetchMinPrice() async {
+    final response = await http
+        .get(Uri.parse('https://api.preciodelaluz.org/v1/prices/min?zone=PCB'));
+
+    if (response.statusCode == 200) {
+      final jsonMap = jsonDecode(response.body);  
+        Price p = Price(hour: jsonMap['hour'], cheap: jsonMap['is-cheap'], price: jsonMap['price']/1000);
+        return p;
+    } else {
+      throw Exception('Failed to fetch min price');
+    }
+  }
+
+  static Future<Price> fetchMaxPrice() async {
+    final response = await http
+        .get(Uri.parse('https://api.preciodelaluz.org/v1/prices/max?zone=PCB'));
+
+    if (response.statusCode == 200) {
+      final jsonMap = jsonDecode(response.body);  
+        Price p = Price(hour: jsonMap['hour'], cheap: jsonMap['is-cheap'], price: jsonMap['price']/1000);
+        return p;
+    } else {
+      throw Exception('Failed to fetch min price');
+    }
+  }
+
   static String apiBase = "https://datadis.es";
   static String apiBasePrivate = "https://datadis.es/api-private";
 
