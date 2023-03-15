@@ -27,29 +27,16 @@ class API {
     }
   }
 
-  static Future<Price> fetchMinPrice() async {
+  static Future<Price> fetchPrice(String type) async {
     final response = await http
-        .get(Uri.parse('https://api.preciodelaluz.org/v1/prices/min?zone=PCB'));
+        .get(Uri.parse('https://api.preciodelaluz.org/v1/prices/$type?zone=PCB'));
 
     if (response.statusCode == 200) {
       final jsonMap = jsonDecode(response.body);  
         Price p = Price(hour: jsonMap['hour'], cheap: jsonMap['is-cheap'], price: jsonMap['price']/1000);
         return p;
     } else {
-      throw Exception('Failed to fetch min price');
-    }
-  }
-
-  static Future<Price> fetchMaxPrice() async {
-    final response = await http
-        .get(Uri.parse('https://api.preciodelaluz.org/v1/prices/max?zone=PCB'));
-
-    if (response.statusCode == 200) {
-      final jsonMap = jsonDecode(response.body);  
-        Price p = Price(hour: jsonMap['hour'], cheap: jsonMap['is-cheap'], price: jsonMap['price']/1000);
-        return p;
-    } else {
-      throw Exception('Failed to fetch min price');
+      throw Exception('Failed to fetch $type price');
     }
   }
 

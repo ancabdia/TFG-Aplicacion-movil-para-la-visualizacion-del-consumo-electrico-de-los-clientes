@@ -43,7 +43,7 @@ class _HomePageState extends State<HomeScreenOld> {
         body: Column(
           children: [
             FutureBuilder(
-                future: API.fetchMinPrice(),
+                future: API.fetchPrice("min"),
                 builder: (context, snapshot) {
                     Price? minPrice = snapshot.data;
                     return Row(
@@ -60,7 +60,7 @@ class _HomePageState extends State<HomeScreenOld> {
                   );
                 }),
             FutureBuilder(
-                future: API.fetchMaxPrice(),
+                future: API.fetchPrice("max"),
                 builder: (context, snapshot) {
                   Price? maxPrice = snapshot.data;
                   return Row(
