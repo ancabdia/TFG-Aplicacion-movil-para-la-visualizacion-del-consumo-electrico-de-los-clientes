@@ -1,17 +1,7 @@
-import 'dart:convert';
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'dart:math';
-import 'package:flutter/material.dart';
-
-import 'package:charts_flutter/flutter.dart';
-import 'package:charts_flutter/src/text_style.dart' as style;
-import 'package:charts_flutter/src/text_element.dart' as element;
-import 'package:path/path.dart';
 import 'package:tfgproyecto/components/formatter.dart';
-import 'package:tfgproyecto/view/profile.dart';
-
 import '../API/API.dart';
 import '../model/Prices.dart';
 
@@ -24,75 +14,151 @@ class HomeScreenOld extends StatefulWidget {
 
 class _HomePageState extends State<HomeScreenOld> {
   List<Price> _prices = [];
+  double price = 0.0;
+  dynamic hour = 0;
+
+  late final PriceController _priceController;
 
   @override
   void initState() {
     super.initState();
+    _priceController = PriceController();
     API.fetchPrices().then((prices) {
+      print("init");
       setState(() {
         _prices = prices;
+        updateData();
       });
     }).catchError((error) {
       print(error.toString());
     });
   }
 
+  void updateData() {
+    if (_prices.isNotEmpty) {
+      hour = int.parse(_prices.last.hour.substring(0, 2));
+      price = _prices.last.price;
+      _priceController.updatePrice(price);
+    }
+  }
+
+  @override
+  void dispose() {
+    _priceController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Column(
-          children: [
-            FutureBuilder(
-                future: API.fetchPrice("min"),
-                builder: (context, snapshot) {
+    var indexWhere = _prices.indexWhere((element) {
+      if (element.hour.substring(0, 2) == DateTime.now().hour.toString()) {
+        return true;
+      }
+      return false;
+    });
+    Price priceNow = _prices[indexWhere];
+
+    return Scaffold(
+      body: Column(
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 3,
+            child: Card(
+              child: Column(
+                children: [
+                  Text('Actual'),
+                  Text('${priceNow.price.toStringAsPrecision(3)} €/kWh ',
+                      style: const TextStyle(
+                          color: Colors.green, fontWeight: FontWeight.bold)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.more_time),
+                      Text('${priceNow.hour}h'),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              FutureBuilder(
+                  future: API.fetchPrice("min"),
+                  builder: (context, snapshot) {
                     Price? minPrice = snapshot.data;
-                    return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text('Precio minimo: ${minPrice?.price.toStringAsPrecision(3)} €/kWh '),
-                      Row(
-                        children: [
-                          const Icon(Icons.more_time),
-                          Text(minPrice?.hour ?? ''),
-                        ],
-                      )
-                    ],
-                  );
-                }),
-            FutureBuilder(
-                future: API.fetchPrice("max"),
-                builder: (context, snapshot) {
-                  Price? maxPrice = snapshot.data;
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text('Precio maximo: ${maxPrice?.price.toStringAsPrecision(3)} €/kWh '),
-                      Row(
-                        children: [
-                          const Icon(Icons.more_time),
-                          Text(maxPrice?.hour ?? ''),
-                        ],
-                      )
-                    ],
-                  );
-                }),
-            _prices.isNotEmpty
-                ? Column(
+                    return SizedBox(
+                      width: MediaQuery.of(context).size.width / 3,
+                      child: Card(
+                        child: Column(
+                          children: [
+                            Text('Minimo'),
+                            Text(
+                                '${minPrice?.price.toStringAsPrecision(3)} €/kWh ',
+                                style: const TextStyle(
+                                    color: Colors.green,
+                                    fontWeight: FontWeight.bold)),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.more_time),
+                                Text('${minPrice?.hour}h'),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  }),
+              FutureBuilder(
+                  future: API.fetchPrice("max"),
+                  builder: (context, snapshot) {
+                    Price? maxPrice = snapshot.data;
+                    return SizedBox(
+                      width: MediaQuery.of(context).size.width / 3,
+                      child: Card(
+                        child: Column(
+                          children: [
+                            Text('Maximo'),
+                            Text(
+                                '${maxPrice?.price.toStringAsPrecision(3)} €/kWh ',
+                                style: const TextStyle(
+                                    color: Colors.deepOrange,
+                                    fontWeight: FontWeight.bold)),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.more_time),
+                                Text('${maxPrice?.hour}h'),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  })
+            ],
+          ),
+          StreamBuilder(
+              stream: _priceController.priceStream,
+              builder: (context, snapshot) {
+                return Column(
                   children: [
-                      Container(
-                      height: 300,
-                      margin: EdgeInsets.all(10),
-                      child: _buildChart(context)),
-                    ],
-                )
-                : const CircularProgressIndicator(),
-          ],
-        ),
+                    Container(
+                        height: MediaQuery.of(context).size.height / 2,
+                        margin: const EdgeInsets.all(10),
+                        child: _buildChart(context)),
+                    Text('PUNTO SELECCIONADO'),
+                    Text('HORA ${Duration(hours: hour)}'),
+                    Text('PRECIO ${price.toStringAsPrecision(3)} €/kWh'),
+                  ],
+                );
+              })
+        ],
       ),
     );
   }
-  
 
   Widget _buildChart(BuildContext context) {
     var data = [
@@ -105,26 +171,23 @@ class _HomePageState extends State<HomeScreenOld> {
       )
     ];
 
-  double getMaxValue(List<charts.Series<Price, int>> data) {
-    double maxValue = 0;
-    for (var series in data) {
-      for (var datum in series.data) {
-        if (datum.price > maxValue) {
-          maxValue = datum.price;
+    double getMaxValue(List<charts.Series<Price, int>> data) {
+      double maxValue = 0;
+      for (var series in data) {
+        for (var datum in series.data) {
+          if (datum.price > maxValue) {
+            maxValue = datum.price;
+          }
         }
       }
+      return maxValue;
     }
-    return maxValue;
-  }
-
-    dynamic price;
-    dynamic hour;
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: charts.LineChart(
         data,
-        animate: true,
+        animate: false,
         defaultRenderer: charts.LineRendererConfig(includePoints: true),
         domainAxis: const charts.NumericAxisSpec(
           tickProviderSpec:
@@ -132,30 +195,28 @@ class _HomePageState extends State<HomeScreenOld> {
           viewport: charts.NumericExtents(0, 23),
         ),
         primaryMeasureAxis: charts.NumericAxisSpec(
-          tickProviderSpec: 
-          const charts.BasicNumericTickProviderSpec(
+          tickProviderSpec: const charts.BasicNumericTickProviderSpec(
               desiredTickCount: 6,
               dataIsInWholeNumbers: false,
               zeroBound: false),
           viewport: charts.NumericExtents(0, getMaxValue(data)),
         ),
         behaviors: [
-          ChartTitle('Precios ${DateTime.now().formatter()}',
+          charts.ChartTitle(
+            'Precios ${DateTime.now().formatter()}',
           ),
-          charts.LinePointHighlighter(
-            ////////////////////// notice ////////////////////////////
-            symbolRenderer:
-                TextSymbolRenderer(() => '${price.toStringAsFixed(4)}', context),
-            ////////////////////// notice ////////////////////////////
-          ),
+          charts.LinePointHighlighter(),
         ],
         selectionModels: [
-          SelectionModelConfig(changedListener: (SelectionModel model) {
+          charts.SelectionModelConfig(
+              changedListener: (charts.SelectionModel model) {
             if (model.hasDatumSelection) {
-              hour = ((model.selectedSeries[0]
-                  .domainFn(model.selectedDatum[0].index)));
-              price = (model.selectedSeries[0]
-                  .measureFn(model.selectedDatum[0].index));
+              setState(() {
+                hour = ((model.selectedSeries[0]
+                    .domainFn(model.selectedDatum[0].index)));
+                price = (model.selectedSeries[0]
+                    .measureFn(model.selectedDatum[0].index)) as double;
+              });
             }
           })
         ],
@@ -164,66 +225,16 @@ class _HomePageState extends State<HomeScreenOld> {
   }
 }
 
-typedef GetText = String Function();
+class PriceController {
+  final _priceStreamController = StreamController<double?>.broadcast();
 
-class TextSymbolRenderer extends CircleSymbolRenderer {
-  TextSymbolRenderer(this.getText, this.context,
-      {this.marginBottom = 8, this.padding = const EdgeInsets.all(8)});
+  Stream<double?> get priceStream => _priceStreamController.stream;
 
-  final GetText getText;
-  final double marginBottom;
-  final EdgeInsets padding;
-  final BuildContext context;
+  void updatePrice(double? price) {
+    _priceStreamController.add(price);
+  }
 
-  @override
-  void paint(ChartCanvas canvas, Rectangle<num> bounds,
-      {List<int>? dashPattern,
-      Color? fillColor,
-      FillPatternType? fillPattern,
-      Color? strokeColor,
-      double? strokeWidthPx}) {
-    super.paint(canvas, bounds,
-        dashPattern: dashPattern,
-        fillColor: fillColor,
-        fillPattern: fillPattern,
-        strokeColor: strokeColor,
-        strokeWidthPx: strokeWidthPx);
-
-    style.TextStyle textStyle = style.TextStyle();
-    textStyle.color = Color.black;
-    textStyle.fontSize = 15;
-
-    element.TextElement textElement = element.TextElement(
-        '${getText.call().padRight(3)} €/kWh',
-        style: textStyle);
-    double width = textElement.measurement.horizontalSliceWidth;
-    double height = textElement.measurement.verticalSliceWidth;
-
-    double centerX = MediaQuery.of(context).size.width / 2;
-    // double centerY = bounds.top +
-    //     bounds.height / 2 -
-    //     marginBottom -
-    //     (padding.top + padding.bottom);
-        double centerY = 300;
-
-    canvas.drawRRect(
-      Rectangle(
-        centerX - (width / 2) - padding.left,
-        centerY - (height / 2) - padding.top,
-        width + (padding.left + padding.right),
-        height + (padding.top + padding.bottom),
-      ),
-      fill: Color.white,
-      radius: 16,
-      roundTopLeft: true,
-      roundTopRight: true,
-      roundBottomRight: true,
-      roundBottomLeft: true,
-    );
-    canvas.drawText(
-      textElement,
-      (centerX - (width / 2)).round(),
-      (centerY - (height / 2)).round(),
-    );
+  void dispose() {
+    _priceStreamController.close();
   }
 }

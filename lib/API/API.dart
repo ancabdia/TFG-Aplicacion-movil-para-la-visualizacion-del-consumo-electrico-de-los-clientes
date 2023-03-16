@@ -47,7 +47,7 @@ class API {
   /// @param username: NIF del usuario dado de alta en Datadis
   /// @param password: Contraseña de acceso a Datadis del usuario
   /// @return token de autentificación
-  Future<String> postLogin(String username, String password) async {
+  static Future<String> postLogin(String username, String password) async {
     final uri = Uri.parse('https://datadis.es/nikola-auth/tokens/login');
     final queryParams = {'username': username, 'password': password};
     final headers = {'Content-Type': 'application/json'};
@@ -61,7 +61,7 @@ class API {
   }
 
   ///Buscar todos los suministros
-  Future<List<Supply>> getSupplies(String bearerToken) async {
+  static Future<List<Supply>> getSupplies(String bearerToken) async {
     final url = Uri.parse('https://datadis.es/api-private/api/get-supplies');
     final headers = {'Authorization': 'Bearer $bearerToken'};
 
@@ -78,7 +78,7 @@ class API {
   }
 
   ///Obtener detalles de un suministro
-  Future<ContractDetail> getContractDetail(
+  static Future<ContractDetail> getContractDetail(
       String bearerToken, String cups, int distributorCode) async {
     final uri =
         Uri.parse('https://datadis.es/api-private/api/get-contract-detail');
@@ -98,7 +98,7 @@ class API {
   }
 
   ///Obtener consumos de un suministro
-  Future<List<Consumption>> getConsumptionData(
+  static Future<List<Consumption>> getConsumptionData(
       String bearerToken,
       String cups,
       String distributorCode,
@@ -131,7 +131,7 @@ class API {
   }
 
   ///Obtener potencias de un suministro
-  Future<List<Power>> getMaxPower(String bearerToken, String cups,
+  static Future<List<Power>> getMaxPower(String bearerToken, String cups,
       String distributorCode, String startDate, String endDate) async {
     final uri =
         Uri.parse('https://datadis.es/api-private/api/get-consumption-data');
