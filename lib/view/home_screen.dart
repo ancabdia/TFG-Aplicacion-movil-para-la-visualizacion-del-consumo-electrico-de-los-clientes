@@ -24,13 +24,12 @@ class _HomePageState extends State<HomeScreenOld> {
     super.initState();
     _priceController = PriceController();
     API.fetchPrices().then((prices) {
-      print("init");
       setState(() {
         _prices = prices;
         updateData();
       });
     }).catchError((error) {
-      print(error.toString());
+      debugPrint(error.toString());
     });
   }
 

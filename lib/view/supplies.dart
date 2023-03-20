@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 import 'dart:convert';
 
 import '../API/API.dart';
+import '../API/db.dart';
 import '../model/Supply.dart';
 
 class SuppliesScreen extends StatefulWidget {
@@ -13,7 +16,33 @@ class SuppliesScreen extends StatefulWidget {
 }
 
 Future<List<Supply>> getSupplies() async {
-  return await API.getSupplies();
+  Database database = await DB.openDB();
+  final prefs = await SharedPreferences.getInstance();
+  List<Map<String, Object?>> list = await database.query('supplies', where: 'userId = ?', whereArgs: [prefs.getString("email")]);
+
+  final supplies =List<Map<String, dynamic>>.from(list);          
+
+  List<Supply> fetchSupplies = await API.getSupplies();
+
+  if(fetchSupplies.length > supplies.length){
+    for (var s in fetchSupplies) {
+      var value = {
+      'cups': s.cups,
+      'address': s.address,
+      'postalCode': s.postalCode,
+      'province': s.province,
+      'municipality': s.municipality,
+      'validDateFrom': s.validDateFrom,
+      'validDateTo': s.validDateTo,
+      'pointType': s.pointType,
+      'distributorCode': s.distributorCode,
+      'distributor': s.distributor,
+      'userId': prefs.getString("email")
+      };
+    database.insert('supplies', value, conflictAlgorithm: ConflictAlgorithm.replace);
+    }
+  }
+  return supplies.map((supply) => Supply.fromJson(supply)).toList();
 }
 
 class _SuppliesScreenState extends State<SuppliesScreen> {
@@ -22,7 +51,6 @@ class _SuppliesScreenState extends State<SuppliesScreen> {
     Scaffold(body: FutureBuilder<List<Supply>>(
         future: getSupplies(),
         builder: (context, snapshot) {
-          print(snapshot);
           if (snapshot.hasError) {
             return const Center(
               child: Text('An error has occurred!'),
@@ -66,11 +94,15 @@ class SupplyList extends StatelessWidget {
                   ),
                   subtitle: Text("Fecha del contrato ${item.validDateFrom}"),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                      'Suministro con direccion: ${item.address} ${item.municipality} ${item.province}'),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('${item.address}'),
+                    Text('${item.municipality}'),
+                    Text('${item.province}'),
+                  ],
                 ),
+                
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
