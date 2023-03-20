@@ -51,6 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
       // Obtain shared preferences.
       final prefs = await SharedPreferences.getInstance();
       prefs.setString("datadisToken", token);
+      prefs.setString("email", user.email);
     } else{
       return Future.delayed(loginTime).then((_) {
         return 'Error code: usuario no es correcto';
@@ -66,7 +67,9 @@ class _LoginScreenState extends State<LoginScreen> {
       User user = User(email: data.name!, password: data.password!, name: data.additionalSignupData!['name']!, surname: data.additionalSignupData!['surname']!, nif: data.additionalSignupData!['nif']!, datadisPassword: data.additionalSignupData!['datadisPassword']!);
       database.insert("users", user.toMap());
       String token = await API.postLogin(data.additionalSignupData!['nif']!, data.additionalSignupData!['datadisPassword']!);
-      print(token);
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString("datadisToken", token);
+      prefs.setString("email", user.email);
     }else{
       return Future.delayed(loginTime).then((_) {
         return 'Error code: DNI ${data.additionalSignupData!["nif"]!} ya registrado en el sistema';

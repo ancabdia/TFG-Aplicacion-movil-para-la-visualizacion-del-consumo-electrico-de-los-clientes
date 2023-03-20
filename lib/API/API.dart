@@ -72,9 +72,9 @@ class API {
     final response = await http.get(url, headers: headers);
 
     if (response.statusCode == 200) {
-      final jsonResponse = jsonDecode(response.body);
+      final String jsonResponse = utf8.decode(response.bodyBytes);
       final supplies =
-          List<Map<String, dynamic>>.from(jsonResponse);
+          List<Map<String, dynamic>>.from(jsonDecode(jsonResponse));
       return supplies.map((json) => Supply.fromJson(json)).toList();
     } else {
       throw Exception('Failed to load supplies');
@@ -93,7 +93,7 @@ class API {
         headers: headers);
 
     if (response.statusCode == 200) {
-      final jsonResponse = jsonDecode(response.body);
+      final jsonResponse = jsonDecode(utf8.decode(response.bodyBytes));
       ContractDetail contractDetail = ContractDetail.fromJson(jsonResponse);
       return contractDetail;
     } else {
