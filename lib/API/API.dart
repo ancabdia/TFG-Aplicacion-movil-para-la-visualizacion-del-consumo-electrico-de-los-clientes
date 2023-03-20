@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tfgproyecto/model/ContractDetail.dart';
 
 import '../model/Consumption.dart';
@@ -61,7 +62,8 @@ class API {
 
   ///Buscar todos los suministros
   static Future<List<Supply>> getSupplies() async {
-    String token = await postLogin("42229164Z", "Tourjuego112!");
+    var prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('datadisToken');
     final url = Uri.parse('https://datadis.es/api-private/api/get-supplies');
     final headers = {'Content-Type': 'application/json',
     'Accept': 'application/json',

@@ -1,19 +1,28 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:tfgproyecto/view/login.dart';
+import 'package:tfgproyecto/view/mainPage.dart';
 
 import 'API/db.dart';
 
 Future<void> main() async {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
   Database db = await DB.openDB();
   log(db.path);
+  final prefs = await SharedPreferences.getInstance();
+  String? logged = prefs.getString('datadisToken');
+  final MyApp myApp = MyApp(
+    initialRoute: logged == null ? '/' : '/home',
+  );
+  runApp(myApp);
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String? initialRoute;
+  const MyApp({super.key, this.initialRoute});
 
   // This widget is the root of your application.
   @override
@@ -57,10 +66,11 @@ class MyApp extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       ),
     ),
-    initialRoute: '/',
+    initialRoute: initialRoute,
       routes: {
-        '/':(context) => LoginScreen(),
+        '/':(context) => const LoginScreen(),
         '/login': (context) => const LoginScreen(),
+        '/home' : (context) => const MainPage(),
       },
     );
   }

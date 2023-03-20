@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:tfgproyecto/API/API.dart';
 import 'package:tfgproyecto/view/home_screen.dart';
 import 'package:tfgproyecto/view/mainPage.dart';
 import 'dart:convert';
@@ -46,10 +47,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if(list.isNotEmpty) {
       User user = User.fromArray(list.first);
+      String token = await API.postLogin(user.nif, user.datadisPassword);
       // Obtain shared preferences.
       final prefs = await SharedPreferences.getInstance();
-
-      print(user);
+      prefs.setString("datadisToken", token);
     } else{
       return Future.delayed(loginTime).then((_) {
         return 'Error code: usuario no es correcto';
@@ -59,15 +60,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<String?> _signupUser(SignupData data) async{
     Database database = await DB.openDB();
-    var list = await database.rawQuery("SELECT * FROM users WHERE email = '${data.name}' AND password = '${data.password}';");
+    var tempUser = await database.rawQuery("SELECT * FROM users WHERE email = '${data.name}' AND password = '${data.password}' OR nif = '${data.additionalSignupData!['nif']}';");
 
-    if(list.isEmpty){
+    if(tempUser.isEmpty){
       User user = User(email: data.name!, password: data.password!, name: data.additionalSignupData!['name']!, surname: data.additionalSignupData!['surname']!, nif: data.additionalSignupData!['nif']!, datadisPassword: data.additionalSignupData!['datadisPassword']!);
-
-      Database database = await DB.openDB();
       database.insert("users", user.toMap());
+      String token = await API.postLogin(data.additionalSignupData!['nif']!, data.additionalSignupData!['datadisPassword']!);
+      print(token);
     }else{
-      debugPrint('Signup Name: ${data.name}, Password: ${data.password}');
       return Future.delayed(loginTime).then((_) {
         return 'Error code: DNI ${data.additionalSignupData!["nif"]!} ya registrado en el sistema';
       });
