@@ -5,13 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:tfgproyecto/view/home_screen.dart';
+import 'package:tfgproyecto/view/mainPage.dart';
 import 'dart:convert';
 
 import 'package:tfgproyecto/view/profile.dart';
 
 import '../API/db.dart';
 import '../model/User.dart';
+import 'GraficoConsumo.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -44,7 +48,6 @@ class _LoginScreenState extends State<LoginScreen> {
       User user = User.fromArray(list.first);
       // Obtain shared preferences.
       final prefs = await SharedPreferences.getInstance();
-
 
       print(user);
     } else{
@@ -80,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return FlutterLogin(
         hideForgotPasswordButton: false,
         title: "Enotify",
-        logo: AssetImage('assets/logo.png'),
+        logo: const AssetImage('assets/logo.png'),
         userType: LoginUserType.email,
         theme: LoginTheme(
 
@@ -151,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
         onSubmitAnimationCompleted: () {
           Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) => ProfilePage(),
+            builder: (context) => const MainPage(),
           ));
         },
         onLogin: _signInUser,
@@ -163,30 +166,3 @@ class _LoginScreenState extends State<LoginScreen> {
       );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
