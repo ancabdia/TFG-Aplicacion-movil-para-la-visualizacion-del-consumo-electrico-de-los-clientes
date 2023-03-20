@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:tfgproyecto/view/home_screen.dart';
 import 'package:tfgproyecto/view/profile.dart';
+import 'package:tfgproyecto/view/supplies.dart';
 
 import '../components/app_bar.dart';
 import 'GraficoConsumo.dart';
@@ -23,7 +24,7 @@ class _MainPageState extends State<MainPage> {
 
   final screens =[
     const HomeScreenOld(),
-    const GraficoConsumo(),
+    const SuppliesScreen(),
     // ProfilePage(),
   ];
 

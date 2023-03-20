@@ -54,23 +54,25 @@ class API {
 
     final response = await http.post(uri.replace(queryParameters: queryParams),
         headers: headers);
-
     return response.statusCode == 200
-        ? jsonDecode(response.body)['token'] as String
+        ? response.body
         : throw Exception('Failed to log in');
   }
 
   ///Buscar todos los suministros
-  static Future<List<Supply>> getSupplies(String bearerToken) async {
+  static Future<List<Supply>> getSupplies() async {
+    String token = await postLogin("42229164Z", "Tourjuego112!");
     final url = Uri.parse('https://datadis.es/api-private/api/get-supplies');
-    final headers = {'Authorization': 'Bearer $bearerToken'};
+    final headers = {'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': 'Bearer $token'};
 
     final response = await http.get(url, headers: headers);
 
     if (response.statusCode == 200) {
       final jsonResponse = jsonDecode(response.body);
       final supplies =
-          List<Map<String, dynamic>>.from(jsonResponse['supplies']);
+          List<Map<String, dynamic>>.from(jsonResponse);
       return supplies.map((json) => Supply.fromJson(json)).toList();
     } else {
       throw Exception('Failed to load supplies');
