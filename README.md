@@ -7,3 +7,9 @@ Con la introducción de la nueva tarifa de luz 2.0TD y su periodificación segú
 Con este proyecto final de carrera se pretende ofrecer de cara al usuario medio una plataforma para dispositivos móviles que, de manera intuitiva y amigable, permita visualizar los suministros a su nombre (independientemente de la distribuidora que los gestione) y permitir para cada uno de ellos, acceder al detalle del contrato y poder visualizar los consumos en diferentes periodos.
 
 Esto será posible gracias a las posibilidades de acceso a la información que proporcionan el despliegue de contadores inteligentes llevado a cabo por las empresas de distribución eléctrica, las cuales ofrecen un amplio abanico de posibilidades a los clientes. [Datadis](https://datadis.es) es la plataforma de datos de consumo que proporciona la **La Asociación de Empresas Eléctricas (ASEME)**, la cual dispone de una API privada de la cual se obtendrá la información de los suministros.
+
+## Stack Tecnológico
+- Flutter
+- SQLite
+- StarUML
+- GitHub proyectos
