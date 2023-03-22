@@ -82,11 +82,14 @@ class API {
   }
 
   ///Obtener detalles de un suministro
-  static Future<ContractDetail> getContractDetail(
-      String bearerToken, String cups, int distributorCode) async {
+  static Future<ContractDetail> getContractDetail(String cups, String distributorCode) async {
+    var prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('datadisToken');
     final uri =
         Uri.parse('https://datadis.es/api-private/api/get-contract-detail');
-    final headers = {'Authorization': 'Bearer $bearerToken'};
+    final headers = {'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': 'Bearer $token'};
     final queryParams = {'cups': cups, 'distributorCode': distributorCode};
 
     final response = await http.get(uri.replace(queryParameters: queryParams),
@@ -94,7 +97,7 @@ class API {
 
     if (response.statusCode == 200) {
       final jsonResponse = jsonDecode(utf8.decode(response.bodyBytes));
-      ContractDetail contractDetail = ContractDetail.fromJson(jsonResponse);
+      ContractDetail contractDetail = ContractDetail.fromJson(jsonResponse[0]);
       return contractDetail;
     } else {
       throw Exception('Failed to load Contract Detail');

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
-import 'dart:convert';
 
 import '../API/API.dart';
 import '../API/db.dart';
 import '../model/Supply.dart';
+import 'contractDetail.dart';
 
 class SuppliesScreen extends StatefulWidget {
   const SuppliesScreen({Key? key}) : super(key: key);
@@ -102,21 +101,17 @@ class SupplyList extends StatelessWidget {
                     Text('${item.province}'),
                   ],
                 ),
-                
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                   ElevatedButton(
                     onPressed: () async {
-                      debugPrint("Consultar contrato con cups ${item.cups}");
-                      //ContractDetail contractDetail = await getContractDetail(item.cups, item.distributorCode!);
-                      // ignore: use_build_context_synchronously
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => ContractDetailScreen(cups: item.cups, distributorCode: item.distributorCode!)
-                      //   ),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ContractDetailScreen(cups: item.cups!, distributorCode: item.distributorCode!)
+                        ),
+                      );
                     },
                     child: const Text('Consultar contrato'),
                   ),
