@@ -49,37 +49,17 @@ class _HomePageState extends State<HomeScreenOld> {
 
   @override
   Widget build(BuildContext context) {
-    var indexWhere = _prices.indexWhere((element) {
-      if (element.hour.substring(0, 2) == DateTime.now().hour.toString()) {
-        return true;
-      }
-      return false;
-    });
-    Price priceNow = _prices[indexWhere];
+    // var indexWhere = _prices.indexWhere((element) {
+    //   if (element.hour.substring(0, 2) == DateTime.now().hour.toString()) {
+    //     return true;
+    //   }
+    //   return false;
+    // });
+    // Price priceNow = _prices[indexWhere];
 
     return Scaffold(
       body: Column(
         children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width / 3,
-            child: Card(
-              child: Column(
-                children: [
-                  Text('Actual'),
-                  Text('${priceNow.price.toStringAsPrecision(3)} €/kWh ',
-                      style: const TextStyle(
-                          color: Colors.green, fontWeight: FontWeight.bold)),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.more_time),
-                      Text('${priceNow.hour}h'),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -88,6 +68,7 @@ class _HomePageState extends State<HomeScreenOld> {
                   builder: (context, snapshot) {
                     Price? minPrice = snapshot.data;
                     return SizedBox(
+                      height: 80,
                       width: MediaQuery.of(context).size.width / 3,
                       child: Card(
                         child: Column(
@@ -110,11 +91,34 @@ class _HomePageState extends State<HomeScreenOld> {
                       ),
                     );
                   }),
+              // SizedBox(
+              //   height: 80,
+              //   width: MediaQuery.of(context).size.width / 3,
+              //   child: Card(
+              //     child: Column(
+              //       children: [
+              //         Text('Actual'),
+              //         Text('${priceNow.price.toStringAsPrecision(3)} €/kWh ',
+              //             style: const TextStyle(
+              //                 color: Colors.green,
+              //                 fontWeight: FontWeight.bold)),
+              //         Row(
+              //           mainAxisAlignment: MainAxisAlignment.center,
+              //           children: [
+              //             const Icon(Icons.more_time),
+              //             Text('${priceNow.hour}h'),
+              //           ],
+              //         )
+              //       ],
+              //     ),
+              //   ),
+              // ),
               FutureBuilder(
                   future: API.fetchPrice("max"),
                   builder: (context, snapshot) {
                     Price? maxPrice = snapshot.data;
                     return SizedBox(
+                      height: 80,
                       width: MediaQuery.of(context).size.width / 3,
                       child: Card(
                         child: Column(
@@ -182,44 +186,39 @@ class _HomePageState extends State<HomeScreenOld> {
       return maxValue;
     }
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: charts.LineChart(
-        data,
-        animate: false,
-        defaultRenderer: charts.LineRendererConfig(includePoints: true),
-        domainAxis: const charts.NumericAxisSpec(
-          tickProviderSpec:
-              charts.BasicNumericTickProviderSpec(desiredTickCount: 12),
-          viewport: charts.NumericExtents(0, 23),
-        ),
-        primaryMeasureAxis: charts.NumericAxisSpec(
-          tickProviderSpec: const charts.BasicNumericTickProviderSpec(
-              desiredTickCount: 6,
-              dataIsInWholeNumbers: false,
-              zeroBound: false),
-          viewport: charts.NumericExtents(0, getMaxValue(data)),
-        ),
-        behaviors: [
-          charts.ChartTitle(
-            'Precios ${DateTime.now().formatter()}',
-          ),
-          charts.LinePointHighlighter(),
-        ],
-        selectionModels: [
-          charts.SelectionModelConfig(
-              changedListener: (charts.SelectionModel model) {
-            if (model.hasDatumSelection) {
-              setState(() {
-                hour = ((model.selectedSeries[0]
-                    .domainFn(model.selectedDatum[0].index)));
-                price = (model.selectedSeries[0]
-                    .measureFn(model.selectedDatum[0].index)) as double;
-              });
-            }
-          })
-        ],
+    return charts.LineChart(
+      data,
+      animate: false,
+      defaultRenderer: charts.LineRendererConfig(includePoints: true),
+      domainAxis: const charts.NumericAxisSpec(
+        tickProviderSpec:
+            charts.BasicNumericTickProviderSpec(desiredTickCount: 12),
+        viewport: charts.NumericExtents(0, 23),
       ),
+      primaryMeasureAxis: charts.NumericAxisSpec(
+        tickProviderSpec: const charts.BasicNumericTickProviderSpec(
+            desiredTickCount: 6, dataIsInWholeNumbers: false, zeroBound: false),
+        viewport: charts.NumericExtents(0, getMaxValue(data)),
+      ),
+      behaviors: [
+        charts.ChartTitle(
+          'Precios ${DateTime.now().formatter()}',
+        ),
+        charts.LinePointHighlighter(),
+      ],
+      selectionModels: [
+        charts.SelectionModelConfig(
+            changedListener: (charts.SelectionModel model) {
+          if (model.hasDatumSelection) {
+            setState(() {
+              hour = ((model.selectedSeries[0]
+                  .domainFn(model.selectedDatum[0].index)));
+              price = (model.selectedSeries[0]
+                  .measureFn(model.selectedDatum[0].index)) as double;
+            });
+          }
+        })
+      ],
     );
   }
 }
