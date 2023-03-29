@@ -12,6 +12,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Database db = await DB.openDB();
   log(db.path);
+  print(db.path);
   final prefs = await SharedPreferences.getInstance();
   String? logged = prefs.getString('datadisToken');
   final MyApp myApp = MyApp(

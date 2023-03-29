@@ -33,6 +33,16 @@ class _HomePageState extends State<HomeScreenOld> {
     });
   }
 
+  Future<Price> actualPrice() async {
+    var indexWhere = _prices.indexWhere((element) {
+      if (element.hour.substring(0, 2) == DateTime.now().hour.toString()) {
+        return true;
+      }
+      return false;
+    });
+    return _prices[indexWhere];
+  }
+
   void updateData() {
     if (_prices.isNotEmpty) {
       hour = int.parse(_prices.last.hour.substring(0, 2));
@@ -49,14 +59,6 @@ class _HomePageState extends State<HomeScreenOld> {
 
   @override
   Widget build(BuildContext context) {
-    // var indexWhere = _prices.indexWhere((element) {
-    //   if (element.hour.substring(0, 2) == DateTime.now().hour.toString()) {
-    //     return true;
-    //   }
-    //   return false;
-    // });
-    // Price priceNow = _prices[indexWhere];
-
     return Scaffold(
       body: Column(
         children: [
@@ -91,28 +93,34 @@ class _HomePageState extends State<HomeScreenOld> {
                       ),
                     );
                   }),
-              // SizedBox(
-              //   height: 80,
-              //   width: MediaQuery.of(context).size.width / 3,
-              //   child: Card(
-              //     child: Column(
-              //       children: [
-              //         Text('Actual'),
-              //         Text('${priceNow.price.toStringAsPrecision(3)} €/kWh ',
-              //             style: const TextStyle(
-              //                 color: Colors.green,
-              //                 fontWeight: FontWeight.bold)),
-              //         Row(
-              //           mainAxisAlignment: MainAxisAlignment.center,
-              //           children: [
-              //             const Icon(Icons.more_time),
-              //             Text('${priceNow.hour}h'),
-              //           ],
-              //         )
-              //       ],
-              //     ),
-              //   ),
-              // ),
+              FutureBuilder(
+                future: actualPrice(),
+                builder: (context, snapshot) {
+                  Price? p = snapshot.data;
+                  return SizedBox(
+                  height: 80,
+                  width: MediaQuery.of(context).size.width / 3,
+                  child: Card(
+                    child: Column(
+                      children: [
+                        Text('Actual'),
+                        Text('${p?.price.toStringAsPrecision(3)} €/kWh ',
+                            style: const TextStyle(
+                                color: Colors.green,
+                                fontWeight: FontWeight.bold)),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.more_time),
+                            Text('${p?.hour}h'),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                );
+                },
+              ),
               FutureBuilder(
                   future: API.fetchPrice("max"),
                   builder: (context, snapshot) {

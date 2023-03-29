@@ -20,7 +20,7 @@ class API {
         prices.add(Price(
             hour: value['hour'],
             cheap: value['is-cheap'],
-            price: value['price']/1000));
+            price: value['price'] / 1000));
       });
       return prices;
     } else {
@@ -29,13 +29,16 @@ class API {
   }
 
   static Future<Price> fetchPrice(String type) async {
-    final response = await http
-        .get(Uri.parse('https://api.preciodelaluz.org/v1/prices/$type?zone=PCB'));
+    final response = await http.get(
+        Uri.parse('https://api.preciodelaluz.org/v1/prices/$type?zone=PCB'));
 
     if (response.statusCode == 200) {
-      final jsonMap = jsonDecode(response.body);  
-        Price p = Price(hour: jsonMap['hour'], cheap: jsonMap['is-cheap'], price: jsonMap['price']/1000);
-        return p;
+      final jsonMap = jsonDecode(response.body);
+      Price p = Price(
+          hour: jsonMap['hour'],
+          cheap: jsonMap['is-cheap'],
+          price: jsonMap['price'] / 1000);
+      return p;
     } else {
       throw Exception('Failed to fetch $type price');
     }
@@ -65,9 +68,11 @@ class API {
     var prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('datadisToken');
     final url = Uri.parse('https://datadis.es/api-private/api/get-supplies');
-    final headers = {'Content-Type': 'application/json',
-    'Accept': 'application/json',
-    'Authorization': 'Bearer $token'};
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token'
+    };
 
     final response = await http.get(url, headers: headers);
 
@@ -82,14 +87,17 @@ class API {
   }
 
   ///Obtener detalles de un suministro
-  static Future<ContractDetail> getContractDetail(String cups, String distributorCode) async {
+  static Future<ContractDetail> getContractDetail(
+      String cups, String distributorCode) async {
     var prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('datadisToken');
     final uri =
         Uri.parse('https://datadis.es/api-private/api/get-contract-detail');
-    final headers = {'Content-Type': 'application/json',
-    'Accept': 'application/json',
-    'Authorization': 'Bearer $token'};
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token'
+    };
     final queryParams = {'cups': cups, 'distributorCode': distributorCode};
 
     final response = await http.get(uri.replace(queryParameters: queryParams),
@@ -106,34 +114,33 @@ class API {
 
   ///Obtener consumos de un suministro
   static Future<List<Consumption>> getConsumptionData(
-      String bearerToken,
       String cups,
       String distributorCode,
       String startDate,
       String endDate,
-      String pointType) async {
-    final uri =
-        Uri.parse('https://datadis.es/api-private/api/get-consumption-data');
-    final headers = {'Authorization': 'Bearer $bearerToken'};
-    final queryParams = {
-      'cups': cups,
-      'distributorCode': distributorCode,
-      'startDate': startDate,
-      'endDate': endDate,
-      'measurementType': "0",
-      'pointType': pointType
-    };
+      int pointType) async {
+    var prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('datadisToken');
 
-    final response = await http.get(uri.replace(queryParameters: queryParams),
-        headers: headers);
+    final response = await http.get(
+      Uri.parse(
+          'https://datadis.es/api-private/api/get-consumption-data?cups=$cups&distributorCode=$distributorCode&startDate=${startDate}&endDate=${endDate}&measurementType=0&pointType=$pointType'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Accept": "application/json",
+        'Authorization': 'Bearer $token',
+      },
+    );
 
     if (response.statusCode == 200) {
       final jsonResponse = jsonDecode(response.body);
+      print(jsonResponse);
       final consumptions =
-          List<Map<String, dynamic>>.from(jsonResponse['consumptions']);
+          List<Map<String, dynamic>>.from(jsonResponse);
+          consumptions.map((e) => print(e));
       return consumptions.map((json) => Consumption.fromJson(json)).toList();
     } else {
-      throw Exception('Failed to load consumptions');
+      throw Exception('Failed to load consumptions (${response.body})');
     }
   }
 

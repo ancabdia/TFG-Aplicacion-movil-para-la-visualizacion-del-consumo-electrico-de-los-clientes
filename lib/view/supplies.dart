@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:tfgproyecto/model/Consumption.dart';
+import 'package:tfgproyecto/view/GraficoConsumo.dart';
+import 'package:tfgproyecto/view/calendar.dart';
 
 import '../API/API.dart';
 import '../API/db.dart';
@@ -117,14 +120,28 @@ class SupplyList extends StatelessWidget {
                   ),
                   const Padding(padding: EdgeInsets.all(16.0)),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       debugPrint("Consultar consumos con cups ${item.cups}");
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => ComsupmtionScreen(cups: item.cups, distributorCode: item.distributorCode!)
-                      //   ),
-                      // );
+                      // List<Consumption> data = await API.getConsumptionData(item.cups!, item.distributorCode!, "2023/01", "2023/02", item.pointType!);
+                      // var database = await DB.openDB();
+                      // var batch = database.batch();
+                      // data.forEach((c) => batch.insert("consumptions",
+                      //   {
+                      //     'supplyId':c.cups,
+                      //     'date':c.date,
+                      //     'time':c.time,
+                      //     'consumptionKWh':c.consumptionKWh,
+                      //     'obtainMethod':c.obtainMethod
+                      //   },
+                      //   conflictAlgorithm: ConflictAlgorithm.ignore,
+                      // ));
+                      // await batch.commit(noResult: true);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CalendarPage(supply: item)
+                        ),
+                      );
                     },
                     child: const Text('Consultar consumos'),
                   ),

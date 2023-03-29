@@ -28,8 +28,12 @@ extension PypeDates on DateTime {
         hour: 23, minute: 59, second: 59, millisecond: 999, microsecond: 999);
   }
 
-  formatter(){
-    return DateFormat('dd/MM/yyyy').format(this);
+  String formatter(){
+    return DateFormat('yyyy/MM/dd').format(this);
+  }
+
+  String formatterMonth(){
+    return DateFormat('yyyy/MM').format(this);
   }
 
   pypeDate() {
