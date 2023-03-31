@@ -3,22 +3,23 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:tfgproyecto/API/encrypter.dart';
 import 'package:tfgproyecto/view/login.dart';
 import 'package:tfgproyecto/view/mainPage.dart';
-
+import 'package:intl/date_symbol_data_local.dart';
 import 'API/db.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Database db = await DB.openDB();
+  encryptInit();
   log(db.path);
-  print(db.path);
   final prefs = await SharedPreferences.getInstance();
   String? logged = prefs.getString('datadisToken');
   final MyApp myApp = MyApp(
     initialRoute: logged == null ? '/' : '/home',
   );
-  runApp(myApp);
+  initializeDateFormatting().then((_) => runApp(const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

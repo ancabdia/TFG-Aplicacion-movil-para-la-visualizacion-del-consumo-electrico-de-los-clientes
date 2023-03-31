@@ -1,6 +1,4 @@
 PODS:
-  - encrypto_flutter (0.0.1):
-    - Flutter
   - Flutter (1.0.0)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
@@ -15,7 +13,6 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
-  - encrypto_flutter (from `.symlinks/plugins/encrypto_flutter/ios`)
   - Flutter (from `Flutter`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
@@ -26,8 +23,6 @@ SPEC REPOS:
     - FMDB
 
 EXTERNAL SOURCES:
-  encrypto_flutter:
-    :path: ".symlinks/plugins/encrypto_flutter/ios"
   Flutter:
     :path: Flutter
   shared_preferences_foundation:
@@ -38,7 +33,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
-  encrypto_flutter: d789807ec8373ea5e0a304a0a4e2ccec3fe92350
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472

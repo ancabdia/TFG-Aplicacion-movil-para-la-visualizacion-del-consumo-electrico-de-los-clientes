@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:encrypto_flutter/encrypto_flutter.dart';
+// import 'package:encrypto_flutter/encrypto_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:http/http.dart' as http;
@@ -8,6 +8,7 @@ import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:tfgproyecto/API/API.dart';
+import 'package:tfgproyecto/API/encrypter.dart';
 import 'package:tfgproyecto/view/home_screen.dart';
 import 'package:tfgproyecto/view/mainPage.dart';
 import 'dart:convert';
@@ -15,6 +16,7 @@ import 'dart:convert';
 import 'package:tfgproyecto/view/profile.dart';
 
 import '../API/db.dart';
+import '../API/encrypter.dart';
 import '../model/User.dart';
 import 'GraficoConsumo.dart';
 
@@ -26,13 +28,13 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   Duration get loginTime => const Duration(milliseconds: 2000);
-  late Encrypto encrypto;
-  late var publicKey;
+  // late Encrypto encrypto;
+  // late var publicKey;
 
   @override
   void initState(){
-    encrypto = Encrypto(Encrypto.RSA, bitLength: 128);
-    publicKey = encrypto.sterilizePublicKey();
+    // encrypto = Encrypto(Encrypto.RSA, bitLength: 128);
+    // publicKey = encrypto.sterilizePublicKey();
     super.initState();
   }
 
@@ -43,11 +45,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<String?> _signInUser(LoginData data) async {
     Database database = await DB.openDB();
-    var list = await database.rawQuery("SELECT * FROM users WHERE email = '${data.name}' AND password = '${data.password}';");
+    var list = await database.rawQuery("SELECT * FROM users WHERE email = '${data.name}' AND password = '${encryptMyData(data.password)}';");
 
     if(list.isNotEmpty) {
       User user = User.fromArray(list.first);
-      String token = await API.postLogin(user.nif, user.datadisPassword);
+      String token = await API.postLogin(user.nif, decryptMyData(user.datadisPassword));
       // Obtain shared preferences.
       final prefs = await SharedPreferences.getInstance();
       prefs.setString("datadisToken", token);
@@ -64,7 +66,9 @@ class _LoginScreenState extends State<LoginScreen> {
     var tempUser = await database.rawQuery("SELECT * FROM users WHERE email = '${data.name}' AND password = '${data.password}' OR nif = '${data.additionalSignupData!['nif']}';");
 
     if(tempUser.isEmpty){
-      User user = User(email: data.name!, password: data.password!, name: data.additionalSignupData!['name']!, surname: data.additionalSignupData!['surname']!, nif: data.additionalSignupData!['nif']!, datadisPassword: data.additionalSignupData!['datadisPassword']!);
+      String encryptPassword = encryptMyData(data.password!);
+      String encryptDatadisPassword = encryptMyData(data.additionalSignupData!['datadisPassword']!);
+      User user = User(email: data.name!, password: encryptPassword, name: data.additionalSignupData!['name']!, surname: data.additionalSignupData!['surname']!, nif: data.additionalSignupData!['nif']!, datadisPassword: encryptDatadisPassword);
       database.insert("users", user.toMap());
       // String token = await API.postLogin(data.additionalSignupData!['nif']!, data.additionalSignupData!['datadisPassword']!);
       // final prefs = await SharedPreferences.getInstance();
@@ -122,12 +126,6 @@ class _LoginScreenState extends State<LoginScreen> {
           UserFormField(
               keyName: 'datadisPassword', displayName: "Contraseña DataDis"
           ),
-
-          // UserFormField(
-          //   keyName: 'phone',
-          //   displayName: 'Numero de telefono',
-          //   userType: LoginUserType.phone,
-          // ),
         ],
         termsOfService: [
           TermOfService(id: "idTerm", mandatory: true,

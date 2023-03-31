@@ -39,10 +39,11 @@ dependencies:
   flutter_login: ^4.1.1 #https://pub.dev/packages/flutter_login
   sqflite: ^2.2.5       #https://pub.dev/packages/sqflite/
   path: ^1.8.2
-  encrypto_flutter: ^1.2.1
   shared_preferences: ^2.0.18
   charts_flutter: ^0.12.0
   table_calendar: ^3.0.3  #for calendar view
+  encrypt: ^5.0.1
+  flutter_dotenv: ^5.0.0
 
 
 
