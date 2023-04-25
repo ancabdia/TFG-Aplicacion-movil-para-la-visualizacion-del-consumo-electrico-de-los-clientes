@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:tfgproyecto/model/Consumption.dart';
-import 'package:tfgproyecto/view/GraficoConsumo.dart';
+import 'package:tfgproyecto/provider/locale_provider.dart';
 import 'package:tfgproyecto/view/calendar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../API/API.dart';
 import '../API/db.dart';
@@ -71,19 +72,24 @@ class _SuppliesScreenState extends State<SuppliesScreen> {
 
 
 
-class SupplyList extends StatelessWidget {
+class SupplyList extends StatefulWidget {
   const SupplyList({super.key, required this.supplies});
 
   final List<Supply> supplies;
 
   @override
+  State<SupplyList> createState() => _SupplyListState();
+}
+
+class _SupplyListState extends State<SupplyList> {
+  @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: _refresh,
       child: ListView.builder(
-        itemCount: supplies.length,
+        itemCount: widget.supplies.length,
         itemBuilder: (context, index) {
-          final item = supplies[index];
+          final item = widget.supplies[index];
           return Card(
             clipBehavior: Clip.antiAlias,
             child: Column(
@@ -94,15 +100,19 @@ class SupplyList extends StatelessWidget {
                     item.cups!,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  subtitle: Text("Fecha del contrato ${item.validDateFrom}"),
+                  // subtitle: Text(AppLocalizations.of(context)!.date_contract(item.validDateFrom!)),
+                  subtitle: Text('subtitulo'),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('${item.address}'),
-                    Text('${item.municipality}'),
-                    Text('${item.province}'),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text('${item.address}'),
+                      Text('${item.municipality}'),
+                      Text('${item.province}'),
+                    ],
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -116,7 +126,7 @@ class SupplyList extends StatelessWidget {
                         ),
                       );
                     },
-                    child: const Text('Consultar contrato'),
+                    child: Text(AppLocalizations.of(context)!.view_contract),
                   ),
                   const Padding(padding: EdgeInsets.all(16.0)),
                   ElevatedButton(
@@ -143,7 +153,7 @@ class SupplyList extends StatelessWidget {
                         ),
                       );
                     },
-                    child: const Text('Consultar consumos'),
+                    child: Text(AppLocalizations.of(context)!.view_consumption),
                   ),
                 ],)
                 
@@ -158,5 +168,8 @@ class SupplyList extends StatelessWidget {
   Future<void> _refresh() async {
     debugPrint('Haciendo refresh');
     //fetchSupplies();
+    setState(() {
+      
+    });
   }
 }

@@ -17,7 +17,7 @@ class ContractDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBars(title: Text(cups)),
+        appBar: AppBars(title: Text(cups), context: context),
         body: FutureBuilder<ContractDetail>(
           future: getContractDetail(cups, distributorCode),
           builder: (context, snapshot) {

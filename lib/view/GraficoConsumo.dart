@@ -65,7 +65,7 @@ class GraficoConsumo extends StatelessWidget {
     }
 
     return Scaffold(
-        appBar: AppBars(title: Text(data.first.cups!)),
+        appBar: AppBars(title: Text(data.first.cups!), context: context),
         body: Column(
           children: 
             [SingleChildScrollView(

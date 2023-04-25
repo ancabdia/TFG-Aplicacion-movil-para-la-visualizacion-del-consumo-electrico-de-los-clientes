@@ -1,0 +1,38 @@
+{
+    "language": "English",
+
+    "home": "Home",
+    "supplies": "Supplies",
+    "profile": "Profile",
+
+    "minimum": "Minimum",
+    "maximum": "Maximum",
+    "actual": "Actual",
+
+    "price_title": "Prices of {price}",
+    "price": "Price {price} €/kWh",
+    "point_selected": "SELECTED POINT",
+    "hour": "Hour {hour}",
+
+    "date_contract": "Date of contract {date}",
+    "view_contract": "View detail",
+    "view_consumption": "View consumptions",
+
+    "passwordHint": "password",
+    "forgotPasswordButton": "Forgor password?",
+    "loginButton": "Login",
+    "signupButton": "Register",
+    "providersTitleFirst": "Login using",
+    "confirmPasswordHint": "repeat password",
+    "terms": "Terms & Conditions",
+    "goBackButton": "Cancel",
+    "password_not_match": "Password not match",
+    "empty_field": "mandatory field",
+    "name": "Name",
+    "surname": "Surname",
+    "datadis_password": "Datatis password",
+    "fill_survey": "Fullfill aditional fields",
+    "recoverPasswordIntro": "Password recover",
+    "recoverPasswordSuccess": "An email has been send",
+    "recoverPasswordDescription": "You will receive instructions on how to change your password by email."
+}

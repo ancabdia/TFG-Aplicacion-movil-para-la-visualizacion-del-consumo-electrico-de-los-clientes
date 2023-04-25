@@ -6,6 +6,7 @@ import 'package:tfgproyecto/view/supplies.dart';
 
 import '../components/app_bar.dart';
 import 'GraficoConsumo.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MainPage extends StatefulWidget {
 //  final Supply? supply;
@@ -32,7 +33,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     //if (widget.supply == null) {
     return Scaffold(
-      appBar: AppBars(title: const Text("App Consumos"), context: context,),
+      appBar: AppBars(title: Text(AppLocalizations.of(context)!.language), context: context,),
       body: IndexedStack(       //Sirve para no perder la referencia del tree y manter las paginas activas: https://youtu.be/xoKqQjSDZ60?t=532
         index: _selectedIndex,
         children: screens,
@@ -41,20 +42,20 @@ class _MainPageState extends State<MainPage> {
       bottomNavigationBar: BottomNavigationBar(
 //        type: BottomNavigationBarType.shifting,
         //  backgroundColor: Colors.amber,
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Inicio',
+            icon: const Icon(Icons.home),
+            label: AppLocalizations.of(context)!.home,
             backgroundColor: Colors.red,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.tips_and_updates_sharp),
-            label: 'Suministros',
+            icon: const Icon(Icons.tips_and_updates_sharp),
+            label: AppLocalizations.of(context)!.supplies,
             backgroundColor: Colors.blue,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.manage_accounts),
-            label: 'Perfil',
+            icon: const Icon(Icons.manage_accounts),
+            label: AppLocalizations.of(context)!.profile,
             backgroundColor: Colors.orange,
           ),
         ],

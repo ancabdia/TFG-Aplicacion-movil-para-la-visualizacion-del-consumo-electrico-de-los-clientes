@@ -1,0 +1,44 @@
+{
+    "language": "Deutsch",
+
+    "home": "Startseite",
+    "supplies": "Elektrizitätsversorgung",
+    "profile": "Profil",
+
+    "minimum": "Minimum",
+    "maximum": "Maximum",
+    "actual": "Aktuell",
+
+    "price_title": "Preise von {price}",
+    "price": "Preise {price} €/kWh",
+    "point_selected": "AUSGEWÄHLTER PUNKT",
+    "hour": "Zeit {hour}",
+
+    "date_contract": "Datum des Vertragsabschlusses {date}",
+    "view_contract": "Vertrag anzeigen",
+    "view_consumption": "Verbrauch anzeigen",
+
+    "password": "Passwort",
+    "password_forgort": "Passwort vergessen?",
+    "login": "Anmelden",
+    "register": "Register",
+    "login_alternative": "Anmeldung über",
+
+    "passwordHint": "passwort",
+    "forgotPasswordButton": "Passwort vergessen?",
+    "loginButton": "Anmelden",
+    "signupButton": "Registrieren",
+    "providersTitleFirst": "Anmelden mit",
+    "confirmPasswordHint": "Passwort wiederholen",
+    "terms": "Allgemeine Geschäftsbedingungen",
+    "goBackButton": "Abbrechen",
+    "password_not_match": "Passwort stimmt nicht überein",
+    "empty_field": "Pflichtfeld",
+    "name": "Name",
+    "surname": "Nachname",
+    "datadis_password": "Datatis-Passwort",
+    "fill_survey": "Zusätzliche Felder ausfüllen",
+    "recoverPasswordIntro": "Passwort wiederherstellen",
+    "recoverPasswordSuccess": "Es wurde eine E-Mail gesendet",
+    "recoverPasswordDescription": "Sie erhalten per E-Mail Anweisungen, wie Sie Ihr Passwort ändern können."
+}

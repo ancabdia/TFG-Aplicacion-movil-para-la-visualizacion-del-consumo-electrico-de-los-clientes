@@ -1,40 +1,24 @@
-import 'dart:developer';
-
-// import 'package:encrypto_flutter/encrypto_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
-import 'package:http/http.dart' as http;
-import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:tfgproyecto/API/API.dart';
 import 'package:tfgproyecto/API/encrypter.dart';
-import 'package:tfgproyecto/view/home_screen.dart';
 import 'package:tfgproyecto/view/mainPage.dart';
-import 'dart:convert';
-
-import 'package:tfgproyecto/view/profile.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../API/db.dart';
-import '../API/encrypter.dart';
 import '../model/User.dart';
-import 'GraficoConsumo.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+ LoginScreen({Key? key}) : super(key: key);
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  Duration get loginTime => const Duration(milliseconds: 2000);
-  // late Encrypto encrypto;
-  // late var publicKey;
-
+  Duration get loginTime => Duration(milliseconds: 2000);
   @override
   void initState(){
-    // encrypto = Encrypto(Encrypto.RSA, bitLength: 128);
-    // publicKey = encrypto.sterilizePublicKey();
     super.initState();
   }
 
@@ -97,41 +81,43 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         messages: LoginMessages(
             userHint: "email",
-            passwordHint: "Contraseña",
-            confirmPasswordHint: "Confirmar contraseña",
-            loginButton: "Iniciar sesión",
-            signupButton: "Registro",
-            forgotPasswordButton: "¿Has olvidado tu contraseña?",
-            goBackButton: "Cancelar",
-            recoverPasswordIntro: "Recuperar contaseña",
-            recoverPasswordSuccess: "Se ha enviado a tu dirección de email el cambio de contraseña.",
-            recoverPasswordDescription: "Recibira en su correo las instrucciones para realizar el cambio de contraseña.",
-            providersTitleFirst: "O inicia sesion a través de ...",
-            recoverPasswordButton: "Recuperar contraseña",
-            additionalSignUpSubmitButton: "Registrarse"
+            passwordHint: AppLocalizations.of(context)!.passwordHint,
+            confirmPasswordHint: AppLocalizations.of(context)!.confirmPasswordHint,
+            loginButton: AppLocalizations.of(context)!.loginButton,
+            signupButton: AppLocalizations.of(context)!.signupButton,
+            forgotPasswordButton: AppLocalizations.of(context)!.forgotPasswordButton,
+            goBackButton: AppLocalizations.of(context)!.goBackButton,
+            recoverPasswordIntro: AppLocalizations.of(context)!.recoverPasswordIntro,
+            recoverPasswordSuccess: AppLocalizations.of(context)!.recoverPasswordSuccess,
+            recoverPasswordDescription: AppLocalizations.of(context)!.recoverPasswordDescription,
+            providersTitleFirst: AppLocalizations.of(context)!.providersTitleFirst,
+            recoverPasswordButton: AppLocalizations.of(context)!.recoverPasswordIntro,
+            additionalSignUpSubmitButton: AppLocalizations.of(context)!.signupButton,
+            additionalSignUpFormDescription: AppLocalizations.of(context)!.fill_survey,
+            confirmPasswordError: AppLocalizations.of(context)!.password_not_match
         ),
         passwordValidator:  (value) {
           if (value == null || value.isEmpty) {
-            return 'Debe ingresar una contraseña';
+            return AppLocalizations.of(context)!.empty_field;
           }
           return null;
         },
-        additionalSignupFields: const [
+        additionalSignupFields: [
           UserFormField(
-              keyName: 'name', displayName: "Nombre", userType: LoginUserType.name),
+              keyName: 'name', displayName: AppLocalizations.of(context)!.name, userType: LoginUserType.name),
           UserFormField(
-              keyName: 'surname', displayName: "Apellido"),
-          UserFormField(
+              keyName: 'surname', displayName: AppLocalizations.of(context)!.surname),
+          const UserFormField(
               keyName: 'nif', icon: Icon(Icons.perm_identity), displayName: "NIF"),
           UserFormField(
-              keyName: 'datadisPassword', displayName: "Contraseña DataDis"
+              keyName: 'datadisPassword', displayName: AppLocalizations.of(context)!.datadis_password
           ),
         ],
         termsOfService: [
           TermOfService(id: "idTerm", mandatory: true,
-              text: "Acepta terminos y condiciones",
+              text: AppLocalizations.of(context)!.terms,
               linkUrl: "http://datadis.es",
-              validationErrorMessage: "Debe aceptar los terminos"
+              validationErrorMessage: AppLocalizations.of(context)!.empty_field
           )
         ],
         loginProviders: <LoginProvider>[
@@ -155,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
         onSubmitAnimationCompleted: () {
           Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) => const MainPage(),
+            builder: (context) => MainPage(),
           ));
         },
         onLogin: _signInUser,

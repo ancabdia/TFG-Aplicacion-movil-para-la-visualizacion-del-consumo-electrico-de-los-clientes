@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:intl/intl.dart';
 import 'package:tfgproyecto/components/formatter.dart';
 import '../API/API.dart';
 import '../model/Prices.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreenOld extends StatefulWidget {
   const HomeScreenOld({Key? key}) : super(key: key);
@@ -68,14 +70,14 @@ class _HomePageState extends State<HomeScreenOld> {
               FutureBuilder(
                   future: API.fetchPrice("min"),
                   builder: (context, snapshot) {
-                    Price? minPrice = snapshot.data;
+                    Price? minPrice = snapshot.data as Price?;
                     return SizedBox(
                       height: 80,
                       width: MediaQuery.of(context).size.width / 3,
                       child: Card(
                         child: Column(
                           children: [
-                            Text('Minimo'),
+                            Text(AppLocalizations.of(context)!.minimum),
                             Text(
                                 '${minPrice?.price.toStringAsPrecision(3)} €/kWh ',
                                 style: const TextStyle(
@@ -96,14 +98,14 @@ class _HomePageState extends State<HomeScreenOld> {
               FutureBuilder(
                 future: actualPrice(),
                 builder: (context, snapshot) {
-                  Price? p = snapshot.data;
+                  Price? p = snapshot.data as Price?;
                   return SizedBox(
                   height: 80,
                   width: MediaQuery.of(context).size.width / 3,
                   child: Card(
                     child: Column(
                       children: [
-                        Text('Actual'),
+                        Text(AppLocalizations.of(context)!.actual),
                         Text('${p?.price.toStringAsPrecision(3)} €/kWh ',
                             style: const TextStyle(
                                 color: Colors.green,
@@ -124,14 +126,14 @@ class _HomePageState extends State<HomeScreenOld> {
               FutureBuilder(
                   future: API.fetchPrice("max"),
                   builder: (context, snapshot) {
-                    Price? maxPrice = snapshot.data;
+                    Price? maxPrice = snapshot.data as Price?;
                     return SizedBox(
                       height: 80,
                       width: MediaQuery.of(context).size.width / 3,
                       child: Card(
                         child: Column(
                           children: [
-                            Text('Maximo'),
+                            Text(AppLocalizations.of(context)!.maximum),
                             Text(
                                 '${maxPrice?.price.toStringAsPrecision(3)} €/kWh ',
                                 style: const TextStyle(
@@ -159,10 +161,11 @@ class _HomePageState extends State<HomeScreenOld> {
                     Container(
                         height: MediaQuery.of(context).size.height / 2,
                         margin: const EdgeInsets.all(10),
-                        child: _buildChart(context)),
-                    Text('PUNTO SELECCIONADO'),
-                    Text('HORA ${Duration(hours: hour)}'),
-                    Text('PRECIO ${price.toStringAsPrecision(3)} €/kWh'),
+                        child: _buildChart(context)
+                    ),
+                    Text(AppLocalizations.of(context)!.point_selected),
+                    Text(AppLocalizations.of(context)!.hour(Duration(hours: hour).toHoursMinutes())),
+                    Text(AppLocalizations.of(context)!.price(price.toStringAsFixed(3))),
                   ],
                 );
               })
@@ -210,7 +213,7 @@ class _HomePageState extends State<HomeScreenOld> {
       ),
       behaviors: [
         charts.ChartTitle(
-          'Precios ${DateTime.now().formatter()}',
+          AppLocalizations.of(context)!.price(DateFormat.yMd(AppLocalizations.of(context)!.localeName).format(DateTime.now()))
         ),
         charts.LinePointHighlighter(),
       ],

@@ -1,9 +1,29 @@
 import 'package:intl/intl.dart';
 
-extension PypeDates on DateTime {
-  DateTime addDays(int days) {
-    return copyWith(day: day + days);
+extension DurationExtend on Duration{
+  /// Converts the duration into a readable string
+  /// 05:15
+  String toHoursMinutes() {
+    String twoDigitMinutes = _toTwoDigits(this.inMinutes.remainder(60));
+    return "${_toTwoDigits(this.inHours)}:$twoDigitMinutes";
   }
+
+  /// Converts the duration into a readable string
+  /// 05:15:35
+  String toHoursMinutesSeconds() {
+    String twoDigitMinutes = _toTwoDigits(this.inMinutes.remainder(60));
+    String twoDigitSeconds = _toTwoDigits(this.inSeconds.remainder(60));
+    return "${_toTwoDigits(this.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
+  }
+
+  String _toTwoDigits(int n) {
+    if (n >= 10) return "$n";
+    return "0$n";
+  }
+}
+
+extension PypeDates on DateTime {
+  
 
   bool isDateEqual(date) {
     return year == date.year && month == date.month && day == date.day;
@@ -18,15 +38,9 @@ extension PypeDates on DateTime {
     return DateTime(int.parse(d[0]), int.parse(d[1]), int.parse(d[2]));
   }
 
-  DateTime startOfDay() {
-    return copyWith(
-        hour: 0, minute: 0, second: 0, millisecond: 0, microsecond: 0);
-  }
+  
 
-  DateTime endOfDay() {
-    return copyWith(
-        hour: 23, minute: 59, second: 59, millisecond: 999, microsecond: 999);
-  }
+  
 
   String formatter(){
     return DateFormat('yyyy/MM/dd').format(this);
@@ -36,15 +50,5 @@ extension PypeDates on DateTime {
     return DateFormat('yyyy/MM').format(this);
   }
 
-  pypeDate() {
-    DateTime today = DateTime.now().startOfDay();
-    if (startOfDay().isDateEqual(today)) {
-      return "Hoy, ${DateFormat('dd.MM.yyyy').format(this)}";
-    }
-    if (startOfDay().isDateEqual(today.add(const Duration(days: 1)))) {
-      return "Morgen, ${DateFormat('dd.MM.yyyy').format(this)}";
-    }
-
-    return '${DateFormat('E', "de").format(this)}, ${DateFormat('dd.MM.yyyy').format(this)}';
-  }
+  
 }
