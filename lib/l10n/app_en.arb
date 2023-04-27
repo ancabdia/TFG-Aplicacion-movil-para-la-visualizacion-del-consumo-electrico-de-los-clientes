@@ -1,4 +1,5 @@
 {
+    "title": "Take control of your consumption in your hands",
     "language": "English",
 
     "home": "Home",
@@ -17,6 +18,23 @@
     "date_contract": "Date of contract {date}",
     "view_contract": "View detail",
     "view_consumption": "View consumptions",
+
+    
+    "contract_detail": "Contract detail:",
+    "localization": "Localization",
+    "supply": "Supply",
+
+    
+    "distributor": "Distributor:",
+    "comercializer": "Comercializadora",
+    "province": "Province",
+    "municipality": "Municipality",
+    "postal_code": "Postal code",
+    "access_fare": "Access fare",
+    "tension_conextion": "Connection voltage",
+    "tension_power": "Contracted power",
+    "discrimination": "Hourly discrimination",
+    "contract_date": "Contract date",
 
     "passwordHint": "password",
     "forgotPasswordButton": "Forgor password?",

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:sqflite_common/sqlite_api.dart';
 import 'package:tfgproyecto/API/API.dart';
 import 'package:tfgproyecto/API/db.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../components/app_bar.dart';
 import '../model/ContractDetail.dart';
 
@@ -17,7 +17,7 @@ class ContractDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBars(title: Text(cups), context: context),
+        appBar: AppBars(title: cups),
         body: FutureBuilder<ContractDetail>(
           future: getContractDetail(cups, distributorCode),
           builder: (context, snapshot) {
@@ -65,7 +65,7 @@ Widget contractDetail(BuildContext context, ContractDetail contract) {
   return Column(
     //crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text("Datos contractuales", style: Theme.of(context).textTheme.headline5),
+      Text(AppLocalizations.of(context)!.contract_detail, style: Theme.of(context).textTheme.headline5),
       Row(
         children: [
           const Text(
@@ -78,8 +78,8 @@ Widget contractDetail(BuildContext context, ContractDetail contract) {
       const Divider(),
       Row(
         children: [
-          const Text(
-            "Distributor: ",
+          Text(
+            AppLocalizations.of(context)!.contract_detail,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Text(contract.distributor!,
@@ -89,8 +89,8 @@ Widget contractDetail(BuildContext context, ContractDetail contract) {
       const Divider(),
       Row(
         children: [
-          const Text(
-            "Comercializadora: ",
+          Text(
+            AppLocalizations.of(context)!.distributor,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Text(contract.marketer!,
@@ -98,26 +98,26 @@ Widget contractDetail(BuildContext context, ContractDetail contract) {
         ],
       ),
       SizedBox(height: 10),
-      Text("Localizacion", style: Theme.of(context).textTheme.headline5),
+      Text(AppLocalizations.of(context)!.localization, style: Theme.of(context).textTheme.headline5),
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Provincia: ",
+          Text(
+            AppLocalizations.of(context)!.province,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Text(contract.province!,
               style: Theme.of(context).textTheme.bodySmall),
           const Divider(),
-          const Text(
-            "Municipio: ",
+          Text(
+            AppLocalizations.of(context)!.municipality,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Text(contract.municipality!,
               style: Theme.of(context).textTheme.bodySmall),
           const Divider(),
-          const Text(
-            "Codigo Postal: ",
+          Text(
+            AppLocalizations.of(context)!.postal_code,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Text(contract.postalCode!,
@@ -125,40 +125,40 @@ Widget contractDetail(BuildContext context, ContractDetail contract) {
         ],
       ),
       const SizedBox(height: 10),
-      Text("Suministro", style: Theme.of(context).textTheme.headline5),
+      Text(AppLocalizations.of(context)!.supply, style: Theme.of(context).textTheme.headline5),
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Tarifa de Acceso: ",
+          Text(
+            AppLocalizations.of(context)!.access_fare,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Text(contract.accessFare!,
               style: Theme.of(context).textTheme.bodySmall),
           const Divider(),
-          const Text(
-            "Tension de conexion: ",
+          Text(
+            AppLocalizations.of(context)!.tension_conextion,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Text(contract.tension!, style: Theme.of(context).textTheme.bodySmall),
           const Divider(),
-          const Text(
-            "Potencia Contratada: ",
+          Text(
+            AppLocalizations.of(context)!.tension_power,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Text(
               "${contract.contractedPowerkWMin} - ${contract.contractedPowerkWMax}",
               style: Theme.of(context).textTheme.bodySmall),
           const Divider(),
-          const Text(
-            "Discriminacion Horaria: ",
+          Text(
+            AppLocalizations.of(context)!.discrimination,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Text(contract.timeDiscrimination!,
               style: Theme.of(context).textTheme.bodySmall),
           const Divider(),
-          const Text(
-            "Fecha contracto: ",
+          Text(
+            AppLocalizations.of(context)!.contract_date,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Text("${contract.startDate}",

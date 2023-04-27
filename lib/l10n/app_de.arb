@@ -1,4 +1,5 @@
 {
+    "title": "Nehmen Sie die Kontrolle über Ihren Konsum selbst in die Hand",
     "language": "Deutsch",
 
     "home": "Startseite",
@@ -23,6 +24,23 @@
     "login": "Anmelden",
     "register": "Register",
     "login_alternative": "Anmeldung über",
+
+
+    "contract_detail": "Vertragsdetails: ",
+    "localization": "Lokalisierung",
+    "supply": "Supply",
+
+    
+    "distributor": "Verteiler:",
+    "comercializer": "Kommerzialisator",
+    "province": "Provinz",
+    "municipality": "Gemeinde",
+    "postal_code": "Postleitzahl",
+    "access_fare": "Zugangstarif",
+    "tension_conextion": "Anschluss-Spannung",
+    "tension_power": "Vertragliche Leistung",
+    "discrimination": "Diskriminierung nach Zeit",
+    "contract_date": "Vertragsdatum",
 
     "passwordHint": "passwort",
     "forgotPasswordButton": "Passwort vergessen?",

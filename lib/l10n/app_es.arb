@@ -1,4 +1,5 @@
 {
+    "title": "Ten el control de tus consumos en tus manos",
     "language": "Español",
     "@language":{
         "description": "El idioma actual"
@@ -34,6 +35,24 @@
     "view_contract": "Consultar contrato",
     "view_consumption": "Consultar consumos",
 
+    
+    "contract_detail": "Datos contractuales:",
+    "localization": "Localización",
+    "supply": "Suministro",
+
+    
+    "distributor": "Distribuidor:",
+    "comercializer": "Comercializadora",
+    "province": "Provincia",
+    "municipality": "Municipio",
+    "postal_code": "Código postal",
+    "access_fare": "Tarifa de acceso",
+    "tension_conextion": "Tensión de conexión",
+    "tension_power": "Potencia contratada",
+    "discrimination": "Discriminación horaria",
+    "contract_date": "Fecha de contrato",
+
+    
     "passwordHint": "contraseña",
     "forgotPasswordButton": "¿Has olvidado tu contraseña?",
     "loginButton": "Iniciar sesion",

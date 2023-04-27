@@ -38,7 +38,6 @@ class MyApp extends StatelessWidget {
       create: (context) => LocaleProvider(),
       builder: (context, child) {
         final provider = Provider.of<LocaleProvider>(context);
-        print(provider.locale);
         return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',

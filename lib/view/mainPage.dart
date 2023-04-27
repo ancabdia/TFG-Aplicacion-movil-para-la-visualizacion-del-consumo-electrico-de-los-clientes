@@ -33,7 +33,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     //if (widget.supply == null) {
     return Scaffold(
-      appBar: AppBars(title: Text(AppLocalizations.of(context)!.language), context: context,),
+      appBar: AppBars(title: AppLocalizations.of(context)!.language),
       body: IndexedStack(       //Sirve para no perder la referencia del tree y manter las paginas activas: https://youtu.be/xoKqQjSDZ60?t=532
         index: _selectedIndex,
         children: screens,

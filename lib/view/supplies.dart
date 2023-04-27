@@ -18,59 +18,71 @@ class SuppliesScreen extends StatefulWidget {
   State<SuppliesScreen> createState() => _SuppliesScreenState();
 }
 
-Future<List<Supply>> getSupplies() async {
+Stream<List<Supply>> getSupplies() async* {
   Database database = await DB.openDB();
   final prefs = await SharedPreferences.getInstance();
-  List<Map<String, Object?>> list = await database.query('supplies', where: 'userId = ?', whereArgs: [prefs.getString("email")]);
+  List<Map<String, Object?>> list = await database.query('supplies',
+      where: 'userId = ?', whereArgs: [prefs.getString("email")]);
 
-  final supplies =List<Map<String, dynamic>>.from(list);          
+  final supplies = List<Map<String, dynamic>>.from(list);
 
-  List<Supply> fetchSupplies = await API.getSupplies();
+  yield supplies.map((supply) => Supply.fromJson(supply)).toList();
 
-  if(fetchSupplies.length > supplies.length){
-    for (var s in fetchSupplies) {
-      var value = {
-      'cups': s.cups,
-      'address': s.address,
-      'postalCode': s.postalCode,
-      'province': s.province,
-      'municipality': s.municipality,
-      'validDateFrom': s.validDateFrom,
-      'validDateTo': s.validDateTo,
-      'pointType': s.pointType,
-      'distributorCode': s.distributorCode,
-      'distributor': s.distributor,
-      'userId': prefs.getString("email")
-      };
-    database.insert('supplies', value, conflictAlgorithm: ConflictAlgorithm.replace);
+  while (true) {
+    await Future.delayed(Duration(seconds: 30));
+    List<Supply> fetchSupplies = await API.getSupplies();
+    if (fetchSupplies.length > supplies.length) {
+      for (var s in fetchSupplies) {
+        var value = {
+          'cups': s.cups,
+          'address': s.address,
+          'postalCode': s.postalCode,
+          'province': s.province,
+          'municipality': s.municipality,
+          'validDateFrom': s.validDateFrom,
+          'validDateTo': s.validDateTo,
+          'pointType': s.pointType,
+          'distributorCode': s.distributorCode,
+          'distributor': s.distributor,
+          'userId': prefs.getString("email")
+        };
+        database.insert('supplies', value,
+            conflictAlgorithm: ConflictAlgorithm.replace);
+      }
+      list = await database.query('supplies',
+          where: 'userId = ?', whereArgs: [prefs.getString("email")]);
+      supplies.clear();
+      supplies.addAll(
+        List<Map<String, dynamic>>.from(list).map(
+          (supply) => Supply.fromJson(supply).toJson(),
+        ),
+      );
+      yield List<Supply>.from(supplies);
     }
   }
-  return supplies.map((supply) => Supply.fromJson(supply)).toList();
 }
 
 class _SuppliesScreenState extends State<SuppliesScreen> {
   @override
-  Widget build(BuildContext context) => 
-    Scaffold(body: FutureBuilder<List<Supply>>(
-        future: getSupplies(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Center(
-              child: Text('An error has occurred!'),
-            );
-          } else if (snapshot.hasData) {
-            return SupplyList(supplies: snapshot.data!);
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
-      ),
-    );
+  Widget build(BuildContext context) => Scaffold(
+        body: StreamBuilder<List<Supply>>(
+          stream: getSupplies(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return const Center(
+                child: Text('An error has occurred!'),
+              );
+            } else if (snapshot.hasData) {
+              return SupplyList(supplies: snapshot.data!);
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+        ),
+      );
 }
-
-
 
 class SupplyList extends StatefulWidget {
   const SupplyList({super.key, required this.supplies});
@@ -100,11 +112,13 @@ class _SupplyListState extends State<SupplyList> {
                     item.cups!,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  // subtitle: Text(AppLocalizations.of(context)!.date_contract(item.validDateFrom!)),
-                  subtitle: Text('subtitulo'),
+                  subtitle: Text(AppLocalizations.of(context)!
+                      .date_contract
+                      .replaceAll("{date}", item.validDateFrom!)),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -117,46 +131,47 @@ class _SupplyListState extends State<SupplyList> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ContractDetailScreen(cups: item.cups!, distributorCode: item.distributorCode!)
-                        ),
-                      );
-                    },
-                    child: Text(AppLocalizations.of(context)!.view_contract),
-                  ),
-                  const Padding(padding: EdgeInsets.all(16.0)),
-                  ElevatedButton(
-                    onPressed: () async {
-                      debugPrint("Consultar consumos con cups ${item.cups}");
-                      // List<Consumption> data = await API.getConsumptionData(item.cups!, item.distributorCode!, "2023/01", "2023/02", item.pointType!);
-                      // var database = await DB.openDB();
-                      // var batch = database.batch();
-                      // data.forEach((c) => batch.insert("consumptions",
-                      //   {
-                      //     'supplyId':c.cups,
-                      //     'date':c.date,
-                      //     'time':c.time,
-                      //     'consumptionKWh':c.consumptionKWh,
-                      //     'obtainMethod':c.obtainMethod
-                      //   },
-                      //   conflictAlgorithm: ConflictAlgorithm.ignore,
-                      // ));
-                      // await batch.commit(noResult: true);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CalendarPage(supply: item)
-                        ),
-                      );
-                    },
-                    child: Text(AppLocalizations.of(context)!.view_consumption),
-                  ),
-                ],)
-                
+                    ElevatedButton(
+                      onPressed: () async {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ContractDetailScreen(
+                                  cups: item.cups!,
+                                  distributorCode: item.distributorCode!)),
+                        );
+                      },
+                      child: Text(AppLocalizations.of(context)!.view_contract),
+                    ),
+                    const Padding(padding: EdgeInsets.all(16.0)),
+                    ElevatedButton(
+                      onPressed: () async {
+                        debugPrint("Consultar consumos con cups ${item.cups}");
+                        // List<Consumption> data = await API.getConsumptionData(item.cups!, item.distributorCode!, "2023/01", "2023/02", item.pointType!);
+                        // var database = await DB.openDB();
+                        // var batch = database.batch();
+                        // data.forEach((c) => batch.insert("consumptions",
+                        //   {
+                        //     'supplyId':c.cups,
+                        //     'date':c.date,
+                        //     'time':c.time,
+                        //     'consumptionKWh':c.consumptionKWh,
+                        //     'obtainMethod':c.obtainMethod
+                        //   },
+                        //   conflictAlgorithm: ConflictAlgorithm.ignore,
+                        // ));
+                        // await batch.commit(noResult: true);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CalendarPage(supply: item)),
+                        );
+                      },
+                      child:
+                          Text(AppLocalizations.of(context)!.view_consumption),
+                    ),
+                  ],
+                )
               ],
             ),
           );
@@ -168,8 +183,6 @@ class _SupplyListState extends State<SupplyList> {
   Future<void> _refresh() async {
     debugPrint('Haciendo refresh');
     //fetchSupplies();
-    setState(() {
-      
-    });
+    setState(() {});
   }
 }

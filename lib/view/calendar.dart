@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:tfgproyecto/components/formatter.dart';
@@ -10,6 +11,7 @@ import 'package:intl/intl.dart';
 import '../API/API.dart';
 import '../API/db.dart';
 import '../model/Supply.dart';
+import '../provider/locale_provider.dart';
 
 class CalendarPage extends StatefulWidget {
   final Supply supply;
@@ -48,7 +50,7 @@ class _CalendarPageState extends State<CalendarPage> {
       body: Column(
         children: [
           TableCalendar(
-            locale: 'es_ES',
+            locale: Provider.of<LocaleProvider>(context).locale.languageCode,
             startingDayOfWeek: StartingDayOfWeek.monday,
             headerStyle: const HeaderStyle(
               formatButtonVisible: false,

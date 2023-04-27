@@ -9,13 +9,30 @@ import 'package:tfgproyecto/view/login.dart';
 
 
 
-class AppBars extends AppBar {
-  AppBars({required Text title, required BuildContext context}):super(
-    title: title,
-    centerTitle: true,
-    //elevation: 10.0,
-    //automaticallyImplyLeading: false,
-    actions: <Widget>[
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+
+
+class AppBars extends StatefulWidget implements PreferredSizeWidget {
+  final String title;
+
+  AppBars({required this.title});
+
+  @override
+  _AppBarsState createState() => _AppBarsState();
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+}
+
+class _AppBarsState extends State<AppBars> {
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      title: Text(widget.title),
+      centerTitle: true,
+      actions: <Widget>[
       DropdownButton(
         // value: Provider.of<LocaleProvider>(context, listen: false).locale,
         icon: const Icon(Icons.language, color: Colors.white,),
@@ -30,6 +47,10 @@ class AppBars extends AppBar {
         onChanged: (lang) {
           final provider = Provider.of<LocaleProvider>(context, listen: false);  
           provider.setLocale(Locale((lang as Language).languageCode));
+          
+          setState(() {
+            
+          });
         },
         ),
       IconButton(
@@ -47,5 +68,6 @@ class AppBars extends AppBar {
         },
       ),
     ],
-  );
+    );
+  }
 }
