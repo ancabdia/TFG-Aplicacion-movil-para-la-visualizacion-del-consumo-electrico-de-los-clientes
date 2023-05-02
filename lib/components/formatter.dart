@@ -38,12 +38,18 @@ extension PypeDates on DateTime {
     return DateTime(int.parse(d[0]), int.parse(d[1]), int.parse(d[2]));
   }
 
-  
-
+  String toTwoDigits(int n) {
+    if (n >= 10) return "$n";
+    return "0$n";
+  }
   
 
   String formatter(){
     return DateFormat('yyyy/MM/dd').format(this);
+  }
+
+  String formatter2(){
+    return DateFormat('yyyy-MM-dd').format(this);
   }
 
   String formatterMonth(){

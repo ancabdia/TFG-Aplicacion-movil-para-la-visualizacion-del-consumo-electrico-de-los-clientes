@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tfgproyecto/components/formatter.dart';
 import '../API/API.dart';
 import '../model/Prices.dart';
@@ -17,7 +18,8 @@ class HomeScreenOld extends StatefulWidget {
 class _HomePageState extends State<HomeScreenOld> {
   List<Price> _prices = [];
   double price = 0.0;
-  dynamic hour = 0;
+  int hour = 0;
+  Price? minPrice, maxPrice;
 
   late final PriceController _priceController;
 
@@ -25,9 +27,11 @@ class _HomePageState extends State<HomeScreenOld> {
   void initState() {
     super.initState();
     _priceController = PriceController();
-    API.fetchPrices().then((prices) {
+    API.pricesToday().then((prices) {
       setState(() {
         _prices = prices;
+        minPrice = prices.reduce((curr, next) => curr.price <= next.price? curr: next);
+        maxPrice = prices.reduce((curr, next) => curr.price >= next.price? curr: next);
         updateData();
       });
     }).catchError((error) {
@@ -37,7 +41,7 @@ class _HomePageState extends State<HomeScreenOld> {
 
   Future<Price> actualPrice() async {
     var indexWhere = _prices.indexWhere((element) {
-      if (element.hour.substring(0, 2) == DateTime.now().hour.toString()) {
+      if (int.parse(element.hour) == DateTime.now().hour) {
         return true;
       }
       return false;
@@ -67,11 +71,7 @@ class _HomePageState extends State<HomeScreenOld> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              FutureBuilder(
-                  future: API.fetchPrice("min"),
-                  builder: (context, snapshot) {
-                    Price? minPrice = snapshot.data as Price?;
-                    return SizedBox(
+              SizedBox(
                       height: 80,
                       width: MediaQuery.of(context).size.width / 3,
                       child: Card(
@@ -79,7 +79,7 @@ class _HomePageState extends State<HomeScreenOld> {
                           children: [
                             Text(AppLocalizations.of(context)!.minimum),
                             Text(
-                                '${minPrice?.price.toStringAsPrecision(3)} €/kWh ',
+                                '${minPrice?.price.toStringAsPrecision(3)} €/kWh',
                                 style: const TextStyle(
                                     color: Colors.green,
                                     fontWeight: FontWeight.bold)),
@@ -87,14 +87,13 @@ class _HomePageState extends State<HomeScreenOld> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const Icon(Icons.more_time),
-                                Text('${minPrice?.hour}h'),
+                                Text(' ${minPrice?.hour} h'),
                               ],
                             )
                           ],
                         ),
                       ),
-                    );
-                  }),
+                    ),
               FutureBuilder(
                 future: actualPrice(),
                 builder: (context, snapshot) {
@@ -106,7 +105,7 @@ class _HomePageState extends State<HomeScreenOld> {
                     child: Column(
                       children: [
                         Text(AppLocalizations.of(context)!.actual),
-                        Text('${p?.price.toStringAsPrecision(3)} €/kWh ',
+                        Text('${p?.price.toStringAsPrecision(3)} €/kWh',
                             style: const TextStyle(
                                 color: Colors.green,
                                 fontWeight: FontWeight.bold)),
@@ -114,7 +113,7 @@ class _HomePageState extends State<HomeScreenOld> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const Icon(Icons.more_time),
-                            Text('${p?.hour}h'),
+                            Text(' ${p?.hour} h'),
                           ],
                         )
                       ],
@@ -123,11 +122,7 @@ class _HomePageState extends State<HomeScreenOld> {
                 );
                 },
               ),
-              FutureBuilder(
-                  future: API.fetchPrice("max"),
-                  builder: (context, snapshot) {
-                    Price? maxPrice = snapshot.data as Price?;
-                    return SizedBox(
+              SizedBox(
                       height: 80,
                       width: MediaQuery.of(context).size.width / 3,
                       child: Card(
@@ -135,7 +130,7 @@ class _HomePageState extends State<HomeScreenOld> {
                           children: [
                             Text(AppLocalizations.of(context)!.maximum),
                             Text(
-                                '${maxPrice?.price.toStringAsPrecision(3)} €/kWh ',
+                                '${maxPrice?.price.toStringAsPrecision(3)} €/kWh',
                                 style: const TextStyle(
                                     color: Colors.deepOrange,
                                     fontWeight: FontWeight.bold)),
@@ -143,14 +138,13 @@ class _HomePageState extends State<HomeScreenOld> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const Icon(Icons.more_time),
-                                Text('${maxPrice?.hour}h'),
+                                Text(' ${maxPrice?.hour} h'),
                               ],
                             )
                           ],
                         ),
                       ),
-                    );
-                  })
+                    )
             ],
           ),
           StreamBuilder(

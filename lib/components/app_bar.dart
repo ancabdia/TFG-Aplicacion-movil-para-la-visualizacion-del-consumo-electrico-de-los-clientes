@@ -15,9 +15,9 @@ import 'package:provider/provider.dart';
 
 
 class AppBars extends StatefulWidget implements PreferredSizeWidget {
-  final String title;
+  final String? title;
 
-  AppBars({required this.title});
+  AppBars({this.title});
 
   @override
   _AppBarsState createState() => _AppBarsState();
@@ -30,29 +30,28 @@ class _AppBarsState extends State<AppBars> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(widget.title),
+      title: Text(widget.title ?? ''),
       centerTitle: true,
       actions: <Widget>[
-      DropdownButton(
-        // value: Provider.of<LocaleProvider>(context, listen: false).locale,
-        icon: const Icon(Icons.language, color: Colors.white,),
-        items: Language.languageList().map<DropdownMenuItem<Language>>((lang) => DropdownMenuItem(value: lang,child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text(lang.flag, style: TextStyle(fontSize: 30),),
-            Text(lang.name)
-          ],
-        ))).toList(),
-        underline: const SizedBox(),
-        onChanged: (lang) {
-          final provider = Provider.of<LocaleProvider>(context, listen: false);  
-          provider.setLocale(Locale((lang as Language).languageCode));
-          
-          setState(() {
+      PopupMenuButton(itemBuilder: (context) {
+        return Language.languageList().map((e) => PopupMenuItem(value: e,child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(e.flag, style: TextStyle(fontSize: 30),),
+              Text(e.name)
+            ],
+          ))).toList();
+      },
+      icon: const Icon(Icons.language, color: Colors.white,),
+      onSelected: (lang) async {
+        print((lang as Language).languageCode);
+            final provider = Provider.of<LocaleProvider>(context, listen: false);  
+            provider.setLocale(Locale((lang as Language).languageCode));
+            var preferences = await SharedPreferences.getInstance();
+            preferences.setString("language", (lang as Language).languageCode);
             
-          });
-        },
-        ),
+          },
+      ),
       IconButton(
         icon: const Icon(Icons.notifications),
         onPressed: () => print('notificaciones'),

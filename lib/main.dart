@@ -6,6 +6,7 @@ import 'package:intl/intl_standalone.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:tfgproyecto/API/encrypter.dart';
+import 'package:tfgproyecto/model/Language.dart';
 import 'package:tfgproyecto/provider/locale_provider.dart';
 import 'package:tfgproyecto/view/login.dart';
 import 'package:tfgproyecto/view/mainPage.dart';
@@ -20,24 +21,29 @@ Future<void> main() async {
   encryptInit();
   log(db.path);
   final prefs = await SharedPreferences.getInstance();
-  String? logged = prefs.getString('datadisToken');
+  String? logged = prefs.getString('email');
+  print(logged);
   final MyApp myApp = MyApp(
     initialRoute: logged == null ? '/' : '/home',
+    initLanguage: prefs.getString("language"),
   );
   // initializeDateFormatting().then((_) => runApp(const MyApp()));
-  runApp(const MyApp());
+  runApp(myApp);
 }
 
 class MyApp extends StatelessWidget {
   final String? initialRoute;
-  const MyApp({super.key, this.initialRoute});
+  final String? initLanguage;
+  const MyApp({super.key, this.initialRoute, this.initLanguage});
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    print("initLanguage: $initLanguage");
     return ChangeNotifierProvider(
       create: (context) => LocaleProvider(),
       builder: (context, child) {
         final provider = Provider.of<LocaleProvider>(context);
+        if(initLanguage == null) provider.locale; else provider.setLocale(Locale(initLanguage!));
         return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',

@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tfgproyecto/view/home_screen.dart';
 import 'package:tfgproyecto/view/profile.dart';
 import 'package:tfgproyecto/view/supplies.dart';
@@ -26,37 +27,39 @@ class _MainPageState extends State<MainPage> {
   final screens =[
     const HomeScreenOld(),
     const SuppliesScreen(),
-    // ProfilePage(),
+    ProfilePage(),
   ];
 
   @override
   Widget build(BuildContext context) {
     //if (widget.supply == null) {
     return Scaffold(
-      appBar: AppBars(title: AppLocalizations.of(context)!.language),
+      appBar: AppBars(),
       body: IndexedStack(       //Sirve para no perder la referencia del tree y manter las paginas activas: https://youtu.be/xoKqQjSDZ60?t=532
         index: _selectedIndex,
         children: screens,
       )
       ,
       bottomNavigationBar: BottomNavigationBar(
-//        type: BottomNavigationBarType.shifting,
-        //  backgroundColor: Colors.amber,
+       type: BottomNavigationBarType.shifting,
+      fixedColor: Colors.blue,
+      unselectedItemColor: Colors.blue,
+      showUnselectedLabels: false,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: const Icon(Icons.home),
+            icon: const Icon(Icons.home_outlined),
             label: AppLocalizations.of(context)!.home,
-            backgroundColor: Colors.red,
+            activeIcon: const Icon(Icons.home),
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.tips_and_updates_sharp),
+            icon: const Icon(Icons.folder_copy_outlined),
             label: AppLocalizations.of(context)!.supplies,
-            backgroundColor: Colors.blue,
+            activeIcon: const Icon(Icons.folder),
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.manage_accounts),
+            icon: const Icon(Icons.account_box_outlined),
             label: AppLocalizations.of(context)!.profile,
-            backgroundColor: Colors.orange,
+            activeIcon: const Icon(Icons.account_box)
           ),
         ],
         currentIndex: _selectedIndex,

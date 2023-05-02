@@ -1,6 +1,8 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tfgproyecto/components/formatter.dart';
 import 'package:tfgproyecto/model/ContractDetail.dart';
 
 import '../model/Consumption.dart';
@@ -9,40 +11,70 @@ import '../model/Prices.dart';
 import '../model/Supply.dart';
 
 class API {
-  static Future<List<Price>> fetchPrices() async {
-    final response = await http
-        .get(Uri.parse('https://api.preciodelaluz.org/v1/prices/all?zone=PCB'));
 
-    if (response.statusCode == 200) {
-      final jsonMap = jsonDecode(response.body);
+  static Future<List<Price>> pricesToday() async{
+    var today = DateTime.now();
+    final response = await http.get(Uri.parse('https://apidatos.ree.es/es/datos/mercados/precios-mercados-tiempo-real?start_date=${today.formatter2()}&end_date=${today.add(const Duration(days: 1)).formatter2()}&time_trunc=hour'));
+    
+    if(response.statusCode == 200){
+      final json = jsonDecode(response.body);
+      final jsonMap = json["included"][0]["attributes"]["values"];
+
       List<Price> prices = [];
-      jsonMap.forEach((key, value) {
-        prices.add(Price(
-            hour: value['hour'],
-            cheap: value['is-cheap'],
-            price: value['price'] / 1000));
-      });
+      for (var element in jsonMap) {
+        double precio = double.parse((element["value"] / 1000).toStringAsFixed(3));
+        String datetime = element["datetime"];
+        DateTime date = DateTime.parse(datetime.substring(0, datetime.indexOf("+")));
+        if(date.day == today.day) {
+          prices.add(Price(
+            hour: date.toTwoDigits(date.hour),
+            cheap: false,
+            price: precio
+        ));
+        }
+      }
       return prices;
-    } else {
+    }else{
       throw Exception('Failed to fetch prices');
     }
   }
 
-  static Future<Price> fetchPrice(String type) async {
-    final response = await http.get(
-        Uri.parse('https://api.preciodelaluz.org/v1/prices/$type?zone=PCB'));
+//YA NO FUNCIONA ESA API
 
-    if (response.statusCode == 200) {
-      final jsonMap = jsonDecode(response.body);
-      Price p = Price(
-          hour: jsonMap['hour'],
-          cheap: jsonMap['is-cheap'],
-          price: jsonMap['price'] / 1000);
-      return p;
-    } else {
-      throw Exception('Failed to fetch $type price');
-    }
-  }
+  // static Future<List<Price>> fetchPrices() async {
+  //   final response = await http
+  //       .get(Uri.parse('https://api.preciodelaluz.org/v1/prices/all?zone=PCB'));
+
+  //   if (response.statusCode == 200) {
+  //     final jsonMap = jsonDecode(response.body);
+  //     List<Price> prices = [];
+  //     jsonMap.forEach((key, value) {
+  //       prices.add(Price(
+  //           hour: value['hour'],
+  //           cheap: value['is-cheap'],
+  //           price: value['price'] / 1000));
+  //     });
+  //     return prices;
+  //   } else {
+  //     throw Exception('Failed to fetch prices');
+  //   }
+  // }
+
+  // static Future<Price> fetchPrice(String type) async {
+  //   final response = await http.get(
+  //       Uri.parse('https://api.preciodelaluz.org/v1/prices/$type?zone=PCB'));
+
+  //   if (response.statusCode == 200) {
+  //     final jsonMap = jsonDecode(response.body);
+  //     Price p = Price(
+  //         hour: jsonMap['hour'],
+  //         cheap: jsonMap['is-cheap'],
+  //         price: jsonMap['price'] / 1000);
+  //     return p;
+  //   } else {
+  //     throw Exception('Failed to fetch $type price');
+  //   }
+  // }
 
   static String apiBase = "https://datadis.es";
   static String apiBasePrivate = "https://datadis.es/api-private";
@@ -134,7 +166,6 @@ class API {
 
     if (response.statusCode == 200) {
       final jsonResponse = jsonDecode(response.body);
-      print(jsonResponse);
       final consumptions =
           List<Map<String, dynamic>>.from(jsonResponse);
           consumptions.map((e) => print(e));

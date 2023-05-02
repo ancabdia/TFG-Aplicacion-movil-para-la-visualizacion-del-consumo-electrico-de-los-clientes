@@ -1,5 +1,6 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
+import 'package:tfgproyecto/view/comparar.dart';
 
 import '../components/app_bar.dart';
 import '../model/Consumption.dart';
@@ -66,47 +67,48 @@ class GraficoConsumo extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBars(title: data.first.cups!),
-        body: Column(
-          children: 
-            [SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Container(
-                height: MediaQuery.of(context).size.height / 2,
-                margin: const EdgeInsets.all(10),
-                width: type == "time" ? data.length * 60 : data.length * 6,
-                child: charts.BarChart(
-                  seriesList,
-                  animate: true,
-                  barRendererDecorator: charts.BarLabelDecorator<String>(),
-                  primaryMeasureAxis: charts.NumericAxisSpec(
-                    // renderSpec: charts.GridlineRendererSpec(
-                    //   labelStyle: charts.TextStyleSpec(
-                    //     fontSize: 11,
-                    //     color: charts.MaterialPalette.gray.shade800,
-                    //   ),
-                    //   lineStyle: const charts.LineStyleSpec(
-                    //       thickness: 1, color: charts.Color.black),
-                    // ),
-                    tickProviderSpec: charts.StaticNumericTickProviderSpec(
-                      <charts.TickSpec<num>>[
-                        const charts.TickSpec<num>(0),
-                        charts.TickSpec<num>(maxTickProviderSpec() / 8),
-                        charts.TickSpec<num>(maxTickProviderSpec() / 4),
-                        charts.TickSpec<num>(maxTickProviderSpec() / 2.6),
-                        charts.TickSpec<num>(maxTickProviderSpec() / 2),
-                        charts.TickSpec<num>(maxTickProviderSpec() / 1.5),
-                        charts.TickSpec<num>(maxTickProviderSpec() / 1.2),
-                        charts.TickSpec<num>(maxTickProviderSpec()),
-                      ],
+        body: Container(
+          margin: const EdgeInsets.all(10),
+          child: Column(
+            children: 
+              [SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height / 2,
+                  width: type == "time" ? data.length * 60 : data.length * 6,
+                  child: charts.BarChart(
+                    seriesList,
+                    animate: true,
+                    barRendererDecorator: charts.BarLabelDecorator<String>(),
+                    primaryMeasureAxis: charts.NumericAxisSpec(
+                      // renderSpec: charts.GridlineRendererSpec(
+                      //   labelStyle: charts.TextStyleSpec(
+                      //     fontSize: 11,
+                      //     color: charts.MaterialPalette.gray.shade800,
+                      //   ),
+                      //   lineStyle: const charts.LineStyleSpec(
+                      //       thickness: 1, color: charts.Color.black),
+                      // ),
+                      tickProviderSpec: charts.StaticNumericTickProviderSpec(
+                        <charts.TickSpec<num>>[
+                          const charts.TickSpec<num>(0),
+                          charts.TickSpec<num>(maxTickProviderSpec() / 8),
+                          charts.TickSpec<num>(maxTickProviderSpec() / 4),
+                          charts.TickSpec<num>(maxTickProviderSpec() / 2.6),
+                          charts.TickSpec<num>(maxTickProviderSpec() / 2),
+                          charts.TickSpec<num>(maxTickProviderSpec() / 1.5),
+                          charts.TickSpec<num>(maxTickProviderSpec() / 1.2),
+                          charts.TickSpec<num>(maxTickProviderSpec()),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Text('PUNTO SELECCIONADO'),
-            Text('HORA '),
-            Text('PRECIO '),
-          ],
+              if(type == "time")
+              CompararScreen(date: data[0].date!, cups: data[0].cups!, consumptions: data)
+            ],
+          ),
         ));
   }
 }
