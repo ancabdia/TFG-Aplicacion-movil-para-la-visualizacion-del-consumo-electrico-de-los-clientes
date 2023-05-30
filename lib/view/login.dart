@@ -36,11 +36,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if(list.isNotEmpty) {
       User user = User.fromArray(list.first);
-      String token = await API.postLogin(user.nif, decryptMyData(user.datadisPassword));
+      String token = await API.postLogin(user.nif!, decryptMyData(user.datadisPassword!));
       // Obtain shared preferences.
       final prefs = await SharedPreferences.getInstance();
       prefs.setString("datadisToken", token);
-      prefs.setString("email", user.email);
+      prefs.setString("email", user.email!);
     } else{
       return Future.delayed(loginTime).then((_) {
         return 'Error code: usuario no es correcto';
@@ -51,20 +51,29 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<String?> _signupUser(SignupData data) async{
     Database database = await DB.openDB();
     var tempUser = await database.rawQuery("SELECT * FROM users WHERE email = '${data.name}' AND password = '${data.password}' OR nif = '${data.additionalSignupData!['nif']}';");
-
-    if(tempUser.isEmpty){
+    User user = User.empty();
+    try{
+      if(tempUser.isEmpty){
       String encryptPassword = encryptMyData(data.password!);
       String encryptDatadisPassword = encryptMyData(data.additionalSignupData!['datadisPassword']!);
-      User user = User(email: data.name!, password: encryptPassword, name: data.additionalSignupData!['name']!, surname: data.additionalSignupData!['surname']!, nif: data.additionalSignupData!['nif']!, datadisPassword: encryptDatadisPassword);
-      database.insert("users", user.toMap());
+      user = User(email: data.name!, password: encryptPassword, name: data.additionalSignupData!['name']!, surname: data.additionalSignupData!['surname']!, nif: data.additionalSignupData!['nif']!, datadisPassword: encryptDatadisPassword);
+      
       String token = await API.postLogin(data.additionalSignupData!['nif']!, data.additionalSignupData!['datadisPassword']!);
       final prefs = await SharedPreferences.getInstance();
       prefs.setString("datadisToken", token);
-      prefs.setString("email", user.email);
+      prefs.setString("email", user.email!);
     }else{
       return Future.delayed(loginTime).then((_) {
         return 'Error code: DNI ${data.additionalSignupData!["nif"]!} ya registrado en el sistema';
       });
+    }
+    }catch(exception){
+      user = User.empty();
+      return Future.delayed(loginTime).then((_) {
+        return 'Error code: usuario no registrado en Datadis';
+      });
+    }finally{
+      if(user.email != null) database.insert("users", user.toMap());
     }
   }
 

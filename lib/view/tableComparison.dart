@@ -13,14 +13,11 @@ class TableComparison extends StatefulWidget {
 }
 
 class _TableComparisonState extends State<TableComparison> {
-  
-
   List<DataRow> rows = [];
   prepareData(){
     List<DataCell> horas = widget.consumption.map((e) => DataCell(Text(e.time!))).toList();
     List<DataCell> consumo =  widget.consumption.map((e) => DataCell(Text(e.consumptionKWh.toString()))).toList();
     List<DataCell> comparado = widget.comparison.map((e) => DataCell(Text(e.toString()))).toList();
-    List<DataCell> icon = [];
     for (var i = 0; i < 24; i++) {
       switch (widget.consumption[i].consumptionKWh! > widget.comparison[i]) {
         case true:
@@ -36,6 +33,7 @@ class _TableComparisonState extends State<TableComparison> {
 
   @override
   void initState() {
+    if(widget.comparison.isNotEmpty)
     prepareData();
     super.initState();
   }

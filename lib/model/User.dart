@@ -1,12 +1,14 @@
 import 'Supply.dart';
 
 class User{
-  final String email;
-  final String password;
-  final String name;
-  final String surname;
-  final String nif;
-  final String datadisPassword;
+  String? email;
+  String? password;
+  String? name;
+  String? surname;
+  String? nif;
+  String? datadisPassword;
+
+  User.empty();
 
   User({
     required this.email,
