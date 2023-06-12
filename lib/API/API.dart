@@ -90,6 +90,7 @@ class API {
 
     final response = await http.post(uri.replace(queryParameters: queryParams),
         headers: headers);
+    print(response.body);
     return response.statusCode == 200
         ? response.body
         : throw Exception('Failed to log in');
@@ -112,6 +113,7 @@ class API {
       final String jsonResponse = utf8.decode(response.bodyBytes);
       final supplies =
           List<Map<String, dynamic>>.from(jsonDecode(jsonResponse));
+        print(supplies);
       return supplies.map((json) => Supply.fromJson(json)).toList();
     } else {
       throw Exception('Failed to load supplies');
@@ -138,6 +140,7 @@ class API {
     if (response.statusCode == 200) {
       final jsonResponse = jsonDecode(utf8.decode(response.bodyBytes));
       ContractDetail contractDetail = ContractDetail.fromJson(jsonResponse[0]);
+      print(contractDetail);
       return contractDetail;
     } else {
       throw Exception('Failed to load Contract Detail');

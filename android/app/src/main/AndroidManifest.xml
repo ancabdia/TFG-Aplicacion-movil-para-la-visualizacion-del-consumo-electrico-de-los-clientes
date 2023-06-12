@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="es.ulpgc.tfgproyecto">
    <application
-        android:label="tfgproyecto"
+        android:label="Enotify"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
