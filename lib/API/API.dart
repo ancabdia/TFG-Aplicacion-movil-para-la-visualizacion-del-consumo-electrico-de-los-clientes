@@ -90,7 +90,6 @@ class API {
 
     final response = await http.post(uri.replace(queryParameters: queryParams),
         headers: headers);
-    print(response.body);
     return response.statusCode == 200
         ? response.body
         : throw Exception('Failed to log in');
@@ -98,7 +97,7 @@ class API {
 
   ///Buscar todos los suministros
   static Future<List<Supply>> getSupplies() async {
-    var prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('datadisToken');
     final url = Uri.parse('https://datadis.es/api-private/api/get-supplies');
     final headers = {
@@ -110,11 +109,10 @@ class API {
     final response = await http.get(url, headers: headers);
 
     if (response.statusCode == 200) {
-      final String jsonResponse = utf8.decode(response.bodyBytes);
-      final supplies =
-          List<Map<String, dynamic>>.from(jsonDecode(jsonResponse));
-        print(supplies);
-      return supplies.map((json) => Supply.fromJson(json)).toList();
+      var jsonResponse = utf8.decode(response.bodyBytes);
+      final supplies = List<Map<String, dynamic>>.from(jsonDecode(jsonResponse));
+      List<Supply> supplyListResponse = supplies.map((json) => Supply.fromJson(json)).toList();
+      return supplyListResponse;
     } else {
       throw Exception('Failed to load supplies');
     }

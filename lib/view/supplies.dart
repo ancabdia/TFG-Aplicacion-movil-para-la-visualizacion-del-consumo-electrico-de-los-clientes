@@ -20,66 +20,66 @@ class SuppliesScreen extends StatefulWidget {
 }
 
 class _SuppliesScreenState extends State<SuppliesScreen> {
-  Stream<List<Supply>> getSupplies() async* {
-    Database database = await DB.openDB();
-    final prefs = await SharedPreferences.getInstance();
-    List<Map<String, Object?>> list = await database.query('supplies',
-        where: 'userId = ?', whereArgs: [prefs.getString("email")]);
+  Future<List<Supply>> getSupplies() async {
+  Database database = await DB.openDB();
+  final prefs = await SharedPreferences.getInstance();
+  List<Map<String, Object?>> list = await database.query(
+    'supplies',
+    where: 'userId = ?',
+    whereArgs: [prefs.getString("email")],
+  );
 
-    final supplies = List<Map<String, dynamic>>.from(list);
-
-    yield supplies.map((supply) => Supply.fromJson(supply)).toList();
-
-    while (true) {
-      await Future.delayed(Duration(seconds: 30));
-      List<Supply> fetchSupplies = await API.getSupplies();
-      if (fetchSupplies.length > supplies.length) {
-        for (var s in fetchSupplies) {
-          var value = {
-            'cups': s.cups,
-            'address': s.address,
-            'postalCode': s.postalCode,
-            'province': s.province,
-            'municipality': s.municipality,
-            'validDateFrom': s.validDateFrom,
-            'validDateTo': s.validDateTo,
-            'pointType': s.pointType,
-            'distributorCode': s.distributorCode,
-            'distributor': s.distributor,
-            'userId': prefs.getString("email")
-          };
-          database.insert('supplies', value,
-              conflictAlgorithm: ConflictAlgorithm.replace);
-        }
-        list = await database.query('supplies',
-            where: 'userId = ?', whereArgs: [prefs.getString("email")]);
-        supplies.clear();
-        supplies.addAll(
-          List<Map<String, dynamic>>.from(list).map(
-            (supply) => Supply.fromJson(supply).toJson(),
-          ),
-        );
-        yield List<Supply>.from(supplies);
-      }
+  if (list.isEmpty) {
+    // If the database is empty, fetch supplies from the API
+    List<Supply> fetchSupplies = await API.getSupplies();
+    for (var s in fetchSupplies) {
+      var value = {
+        'cups': s.cups,
+        'address': s.address,
+        'postalCode': s.postalCode,
+        'province': s.province,
+        'municipality': s.municipality,
+        'validDateFrom': s.validDateFrom,
+        'validDateTo': s.validDateTo,
+        'pointType': s.pointType,
+        'distributorCode': s.distributorCode,
+        'distributor': s.distributor,
+        'userId': prefs.getString("email")
+      };
+      database.insert('supplies', value, conflictAlgorithm: ConflictAlgorithm.replace);
     }
+    list = await database.query(
+      'supplies',
+      where: 'userId = ?',
+      whereArgs: [prefs.getString("email")],
+    );
   }
+
+  final supplies = List<Map<String, dynamic>>.from(list);
+
+  return supplies.map((supply) => Supply.fromJson(supply)).toList();
+}
+
+
 
   Future<void> _refresh() async {
     debugPrint('Haciendo refresh');
-    //fetchSupplies();
-    setState(() {});
+    
+    setState(() {getSupplies();});
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: StreamBuilder<List<Supply>>(
-          stream: getSupplies(),
+        body: FutureBuilder<List<Supply>>(
+          future: getSupplies(),
           builder: (context, snapshot) {
-            if (snapshot.hasError) {
+            if(snapshot.connectionState == ConnectionState.waiting){
               return const Center(
-                child: Text('An error has occurred!'),
+                child: CircularProgressIndicator(),
               );
-            } else if (snapshot.hasData) {
+            }else if(snapshot.hasError){
+              return Container();
+            }else {
               List<Supply>? suministros = snapshot.data;
               return RefreshIndicator(
                 onRefresh: _refresh,
@@ -152,10 +152,6 @@ class _SuppliesScreenState extends State<SuppliesScreen> {
                     );
                   },
                 ),
-              );
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(),
               );
             }
           },
