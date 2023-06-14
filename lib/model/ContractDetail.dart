@@ -8,9 +8,11 @@ class ContractDetail {
   String? municipality;
   String? postalCode;
   List<double>? contractedPowerkW;
+  double? contractedPowerkWMin;
+  double? contractedPowerkWMax;
   String? timeDiscrimination;
-  String? modePowerControl;
   String? startDate;
+  String? modePowerControl;
   String? endDate;
   String? codeFare;
 
@@ -23,7 +25,9 @@ class ContractDetail {
         this.province,
         this.municipality,
         this.postalCode,
+        this.contractedPowerkWMin,
         this.contractedPowerkW,
+        this.contractedPowerkWMax,
         this.timeDiscrimination,
         this.modePowerControl,
         this.startDate,
@@ -39,7 +43,14 @@ class ContractDetail {
     province = json['province'];
     municipality = json['municipality'];
     postalCode = json['postalCode'];
-    contractedPowerkW = json['contractedPowerkW'].cast<double>();
+    if(json['contractedPowerkW'] == null){
+      contractedPowerkWMin = json['contractedPowerkWMin'];
+      contractedPowerkWMax = json['contractedPowerkWMax'];
+    }else{
+      contractedPowerkW = json['contractedPowerkW'].cast<double>();
+      contractedPowerkWMin = json['contractedPowerkW'][0];
+      contractedPowerkWMax = json['contractedPowerkW'][1];
+    }
     timeDiscrimination = json['timeDiscrimination'];
     modePowerControl = json['modePowerControl'];
     startDate = json['startDate'];
@@ -57,7 +68,7 @@ class ContractDetail {
     data['province'] = this.province;
     data['municipality'] = this.municipality;
     data['postalCode'] = this.postalCode;
-    data['contractedPowerkW'] = this.contractedPowerkW;
+    data['contractedPowerkW'] = [contractedPowerkWMin, contractedPowerkWMax];
     data['timeDiscrimination'] = this.timeDiscrimination;
     data['modePowerControl'] = this.modePowerControl;
     data['startDate'] = this.startDate;

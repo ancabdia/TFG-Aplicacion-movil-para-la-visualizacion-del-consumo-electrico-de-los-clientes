@@ -1,0 +1,73 @@
+{
+    "title": "Ten el control de tus consumos en tus manos",
+    "language": "Español",
+    "@language":{
+        "description": "El idioma actual"
+    },
+
+    "home": "Inicio",
+    "supplies": "Suministros",
+    "profile": "Perfil",
+
+    "minimum": "Mínimo",
+    "maximum": "Máximo",
+    "actual": "Actual",
+
+    "price_title": "Precios del {price}",
+    "price": "Precio {price} €/kWh",
+    "@price":{
+        "type": "text",
+        "placeholders": {
+            "price": {}
+        }
+    },
+    "point_selected": "PUNTO SELECCIONADO",
+    "hour": "Hora {hour}",
+    "@hour":{
+        "type": "text",
+        "placeholders": {
+            "hour": {}
+        },
+        "description": "La hora actual"
+    },
+
+    "date_contract": "Fecha del contrato {date}",
+    "view_contract": "Consultar contrato",
+    "view_consumption": "Consultar consumos",
+
+    
+    "contract_detail": "Datos contractuales:",
+    "localization": "Localización",
+    "supply": "Suministro",
+
+    
+    "distributor": "Distribuidor:",
+    "comercializer": "Comercializadora",
+    "province": "Provincia",
+    "municipality": "Municipio",
+    "postal_code": "Código postal",
+    "access_fare": "Tarifa de acceso",
+    "tension_conextion": "Tensión de conexión",
+    "tension_power": "Potencia contratada",
+    "discrimination": "Discriminación horaria",
+    "contract_date": "Fecha de contrato",
+
+    
+    "passwordHint": "contraseña",
+    "forgotPasswordButton": "¿Has olvidado tu contraseña?",
+    "loginButton": "Iniciar sesion",
+    "signupButton": "Registrarse",
+    "providersTitleFirst": "Iniciar sesion usando",
+    "confirmPasswordHint": "repetir contraseña",
+    "terms": "Terminos y Condiciones",
+    "goBackButton": "Cancelar",
+    "password_not_match": "Contraseña no coincide",
+    "empty_field": "Campo obligatorio",
+    "name": "Nombre",
+    "surname": "Apellido/Apellidos",
+    "datadis_password": "Contraseña Datadis",
+    "fill_survey": "Rellene los datos adicionales",
+    "recoverPasswordIntro": "Recuperar contraseña",
+    "recoverPasswordSuccess": "Se ha enviado a tu dirección de email el cambio de contraseña",
+    "recoverPasswordDescription": "Recibira en su correo las instrucciones para realizar el cambio de contraseña"
+}

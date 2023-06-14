@@ -12,8 +12,10 @@ class Consumption {
         this.consumptionKWh,
         this.obtainMethod});
 
+  Consumption.date({this.date, this.consumptionKWh});
+
   Consumption.fromJson(Map<String, dynamic> json) {
-    cups = json['cups'];
+    cups = json['supplyId'];
     date = json['date'];
     time = json['time'];
     consumptionKWh = json['consumptionKWh'];
