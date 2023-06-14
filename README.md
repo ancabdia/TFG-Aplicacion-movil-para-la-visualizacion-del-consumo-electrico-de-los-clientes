@@ -1,8 +1,15 @@
 # Aplicación móvil para la visualización del consumo eléctrico de los clientes
  <img src="assets/logo.png?raw=true"  width="20%" height="20%"> 
 
+**Índice**   
+1. [Introducción al contexto del proyecto](#id1)
+2. [Stack tecnológico](#id2)
+3. [Metodologías empleadas](#id3)
+4. [Diagramas de caso de uso](#id4)
+5. [Manual de Uso](#id5)
+6. [Conclusiones finales](#id6)
 
-## Introducción al contexto del proyecto
+## Introducción al contexto del proyecto <a name="id1"></a>
 ### Descripción/motivación del proyecto
 Con este proyecto final de carrera se pretende ofrecer de cara al usuario medio una plataforma para dispositivos móviles que, de manera intuitiva y amigable, permita visualizar los suministros a su nombre (independientemente de la distribuidora que los gestione) y permitir para cada uno de ellos, acceder al detalle del contrato y poder visualizar los consumos en diferentes periodos.
 Esto será posible gracias a las posibilidades de acceso a la información que proporcionan el despliegue de contadores inteligentes llevado a cabo por las empresas de distribución eléctrica, las cuales ofrecen un amplio abanico de posibilidades a los clientes. [Datadis](https://www.datadis.es) es la plataforma de datos de consumo que proporciona la **Asociación de Empresas Eléctricas (ASEME)**, la cual dispone de una API privada de la cual se obtendrá la información de los suministros.
@@ -15,27 +22,21 @@ Finalmente, en cuanto a las tecnologías que se han utilizado a lo largo de la i
 - Contribuir a la mejora de la eficiencia energética y la sostenibilidad, fomentando la reducción del consumo eléctrico y, por tanto, la disminución de emisiones de 𝐶𝑂2.
 Servir como herramienta de educación y concienciación sobre la importancia de la gestión del consumo eléctrico y su impacto en el medio ambiente.
 
-## Stack Tecnológico
+## Stack Tecnológico <a name="id2"></a>
 - Flutter
 - SQLite
 
-## Metodologías empleadas
+## Metodologías empleadas <a name="id3"></a>
 - SCRUM
 - Kanban
 
-## Diagramas de caso de uso
+## Diagramas de caso de uso <a name="id4"></a>
 ### Casos de uso: usuario no registrado
 ![Diagrama caso de uso usuario no registrado](assets/diagrams/Usario_no_registrado_diagrama.svg)
 ### Casos de uso: usuario registrado
 ![Diagrama caso de uso usuario registrado](assets/diagrams/Usuario_registrado_diagrama.svg)
 
-## Resultado final
-Introduciendo esta innovadora plataforma móvil, tendrás acceso a la consulta de suministros eléctricos de manera rápida y sencilla, sin importar el proveedor de servicios. Está aplicación móvil, compatible con cualquier dispositivo, ha sido desarrollada para permitir a los usuarios realizar todas las tareas mencionadas en las secciones anteriores.
-Pero eso no es todo. 
-Este proyecto ha sido una oportunidad de crecimiento personal, adquiriendo conocimientos en el desarrollo móvil con un lenguaje de programación de vanguardia, con una gran demanda en el mercado. Además, ha logrado fortalecer mis habilidades adquiridas a lo largo de la carrera.
-En resumen, los objetivos planteados inicialmente han sido cumplidos con éxito, incluso se han agregado nuevas funcionalidades durante el desarrollo para brindar un mayor valor al producto. Y, para futuros proyectos, podríamos seguir mejorando y añadiendo características que brinden aún más utilidad y valor. Incluso considerar la posibilidad de ofrecer esta aplicación de forma gratuita para el público en general una vez se produjera su lanzamiento, con el fin de adquirir una gran fuente de datos.
-
-# Manual de Uso
+# Manual de Uso <a name="id5"></a>
 ## Requisitos previos
 - [ ] Dispositivo fisico o real donde ejecutar la aplicación.
 - [ ] Registro previo del usuario en la plataforma de [Datadis](https://www.datadis.es).
@@ -90,3 +91,10 @@ Para ello disponemos en la parte inferior de un selector de provincia el cual se
 A través de su Perfil puede visualizar la información relativa a su usuario, además de disponer de un botón para cerrar su sesión.
 
 <img src="assets/screenshots/profile.png?raw=true"  width="50%" height="50%">
+
+## Conclusiones finales <a name="id6"></a>
+Introduciendo esta innovadora plataforma móvil, tendrás acceso a la consulta de suministros eléctricos de manera rápida y sencilla, sin importar el proveedor de servicios. Está aplicación móvil, compatible con cualquier dispositivo, ha sido desarrollada para permitir a los usuarios realizar todas las tareas mencionadas en las secciones anteriores.
+Pero eso no es todo. 
+Este proyecto ha sido una oportunidad de crecimiento personal, adquiriendo conocimientos en el desarrollo móvil con un lenguaje de programación de vanguardia, con una gran demanda en el mercado. Además, ha logrado fortalecer mis habilidades adquiridas a lo largo de la carrera.
+En resumen, los objetivos planteados inicialmente han sido cumplidos con éxito, incluso se han agregado nuevas funcionalidades durante el desarrollo para brindar un mayor valor al producto. Y, para futuros proyectos, podríamos seguir mejorando y añadiendo características que brinden aún más utilidad y valor. Incluso considerar la posibilidad de ofrecer esta aplicación de forma gratuita para el público en general una vez se produjera su lanzamiento, con el fin de adquirir una gran fuente de datos.
+
