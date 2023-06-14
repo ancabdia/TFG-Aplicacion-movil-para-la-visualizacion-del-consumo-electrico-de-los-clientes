@@ -12,7 +12,9 @@
 ## Introducción al contexto del proyecto <a name="id1"></a>
 ### Descripción/motivación del proyecto
 Con este proyecto final de carrera se pretende ofrecer de cara al usuario medio una plataforma para dispositivos móviles que, de manera intuitiva y amigable, permita visualizar los suministros a su nombre (independientemente de la distribuidora que los gestione) y permitir para cada uno de ellos, acceder al detalle del contrato y poder visualizar los consumos en diferentes periodos.
+
 Esto será posible gracias a las posibilidades de acceso a la información que proporcionan el despliegue de contadores inteligentes llevado a cabo por las empresas de distribución eléctrica, las cuales ofrecen un amplio abanico de posibilidades a los clientes. [Datadis](https://www.datadis.es) es la plataforma de datos de consumo que proporciona la **Asociación de Empresas Eléctricas (ASEME)**, la cual dispone de una API privada de la cual se obtendrá la información de los suministros.
+
 Finalmente, en cuanto a las tecnologías que se han utilizado a lo largo de la implementación de este trabajo han sido Dart, un lenguaje de programación gratuito y abierto a la comunidad, empleando para ello del “framework” de Flutter y en cuanto al lado del servidor se ha utilizado el gestor de base de datos de SQLite.
 
 ### Objetivos
@@ -45,6 +47,7 @@ Servir como herramienta de educación y concienciación sobre la importancia de 
 
 ### Registro en la apliación
 Tras el registro en la plataforma de Datadis, se debe abrir la aplicación y la primera pantalla que se mostrará será la de autenticación del usuario. En caso de no estar registrado pulsando el botón de Registro y rellenando el formulario superior previamente podremos registrarnos en el sistema rellenando el siguiente formulario, con nuestros datos y los datos de acceso a Datadis.
+
 Tras completar los datos, se pulsará en el botón de Registrarse. Si todo ha ido bien, será redirigido a la página principal de la aplicación, en caso contrario, se mostrará un mensaje de error.
 
 <img src="assets/screenshots/register.png?raw=true"  width="50%" height="50%"> <img src="assets/screenshots/register_2.png?raw=true"  width="50%" height="50%">
@@ -56,6 +59,7 @@ Para iniciar sesión, deberá pulsar en el botón de Iniciar Sesión que se encu
 
 ### Página de Inicio: Visualizar precio PVPC diario
 Una vez se haya cargado la página principal, en esta podemos desde cambiar el idioma de la aplicación, consultar el precio de mercado regulado en el día de hoy en cualquiera de sus tramos y además visualizar directamente los puntos más críticos, es decir, aquellos en los que el precio es mayor y menor en el día. Además, haciendo clic en alguno de los puntos de la gráfica se mostrará debajo el precio para dicha hora en €/kWh.
+
 Por otro lado, en la barra inferior, tenemos el menú de navegación que nos permite navegar entre las distintas vistas principales: Inicio, Suministros y Perfil.
 
 <img src="assets/screenshots/home.png?raw=true"  width="50%" height="50%">
@@ -67,6 +71,7 @@ Además durante el flujo continuo de la aplicación podrá cambiar el idioma ent
 
 ### Ver suministros
 Para consultar los suministros a su nombre o que haya sido autorizado podrá dirigirse al apartado correspondiente, donde visualizara una lista conformada por distintos suministros con los que puede interactuar.
+
 A través de esta lista, podrá acceder a las funcionalidades de visualizar el contrato de un suminsitro o consultar el consumo del mismo.
 
 <img src="assets/screenshots/supplies.png?raw=true"  width="50%" height="50%">
@@ -78,12 +83,14 @@ Para consultar el contrato de un suministro navegaremos a la página de suminist
 
 ### Ver consumo
 Para consultar el consumo de un suministro navegaremos a la página de suministros, donde se desplegará una lista de los suministros asignados a nuestro usuario, si hacemos clic en el botón pertinente se nos mostrará una vista con un calendario donde podremos seleccionar el día o días a consultar.
+
 Una vez hagamos esto en función del tipo de rango seleccionado se nos mostrará una u otra información. En caso de la primera se mostrarán 24 barras, una para cada hora del día con sus consumos en kWh respectivamente. En el caso de haber seleccionado más de un día, se mostrará n-barras verticales, una para cada día representando el consumo total de dicho día.
 
 -- PENDIENTE IMAGEN ACTUALIZADA --
 
 ### Comparar un suministro
 Cuando consultamos el consumo de un suministro para un día, tendremos la opción de comparar los resultados obtenidos con los del resto de suministros de los que se disponga datos a través de la base de datos.
+
 Para ello disponemos en la parte inferior de un selector de provincia el cual será de obligatorio cumplimiento a la hora de realizar la consulta, y tras seleccionar el mismo, se mostrará en el siguiente seleccionable de carácter voluntario un desplegable de municipios para los cuales también se dispone de datos a comparar.
 
 -- PENDIENTE IMAGEN ACTUALIZADA --
