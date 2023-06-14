@@ -22,6 +22,7 @@ Servir como herramienta de educación y concienciación sobre la importancia de 
 - Kanban
 
 ## Diagramas de caso de uso
-
-
-## Capturas de pantalla
+### Casos de uso: usuario no registrado
+![Diagrama caso de uso usuario no registrado](https://github.com/ancabdia/TFG-Flutter-app-consumos/blob/master/assets/Uusario_no_registrado_diagrama.svg)
+### Casos de uso: usuario registrado
+![Diagrama caso de uso usuario registrado](https://github.com/ancabdia/TFG-Flutter-app-consumos/blob/master/assets/Usuario_registrado_diagrama.svg)
