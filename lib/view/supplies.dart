@@ -71,13 +71,17 @@ class _SuppliesScreenState extends State<SuppliesScreen> {
         body: FutureBuilder<List<Supply>>(
           future: getSupplies(),
           builder: (context, snapshot) {
+            debugPrint("entrada en el build");
             if(snapshot.connectionState == ConnectionState.waiting){
+              debugPrint("entrada en cargando");
               return const Center(
                 child: CircularProgressIndicator(),
               );
             }else if(snapshot.hasError){
+              debugPrint("entrada en error");
               return Container();
             }else {
+              debugPrint("entrada en carga suministro");
               List<Supply>? suministros = snapshot.data;
               return RefreshIndicator(
                 onRefresh: _refresh,

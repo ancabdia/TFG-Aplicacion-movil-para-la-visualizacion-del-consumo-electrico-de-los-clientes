@@ -83,8 +83,8 @@ class _CalendarPageState extends State<CalendarPage> {
                   }
                 });
                 _rangeSelectionMode == RangeSelectionMode.toggledOn
-                    ? print('$_rangeStart & $_rangeEnd')
-                    : print(_selectedDay);
+                    ? debugPrint('$_rangeStart & $_rangeEnd')
+                    : debugPrint(_selectedDay.toString());
               }
             },
             onRangeSelected: (start, end, focusedDay) {

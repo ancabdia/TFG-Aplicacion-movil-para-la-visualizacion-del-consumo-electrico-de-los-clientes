@@ -101,7 +101,7 @@ class _CompararScreenState extends State<CompararScreen> {
                             var comparison = <String,double>{};
                             for (var element in suppliesFilter) {
                               if(comparison.containsKey(element["time"])){
-                                print("elemento ya incluido");
+                                debugPrint("elemento ya incluido");
                                 var new_value = comparison["${element["time"]}"]! + element["consumptionKWh"];
                                 comparison.remove(element["time"]);
                               }

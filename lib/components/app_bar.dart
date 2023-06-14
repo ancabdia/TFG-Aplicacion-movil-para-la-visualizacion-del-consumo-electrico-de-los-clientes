@@ -30,7 +30,7 @@ class _AppBarsState extends State<AppBars> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(widget.title ?? ''),
+      title: SingleChildScrollView(scrollDirection:Axis.horizontal, child: Text(widget.title ?? '')),
       centerTitle: true,
       actions: <Widget>[
       PopupMenuButton(itemBuilder: (context) {

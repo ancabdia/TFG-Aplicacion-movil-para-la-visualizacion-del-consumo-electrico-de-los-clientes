@@ -138,7 +138,6 @@ class API {
     if (response.statusCode == 200) {
       final jsonResponse = jsonDecode(utf8.decode(response.bodyBytes));
       ContractDetail contractDetail = ContractDetail.fromJson(jsonResponse[0]);
-      print(contractDetail);
       return contractDetail;
     } else {
       throw Exception('Failed to load Contract Detail');
