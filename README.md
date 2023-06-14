@@ -40,6 +40,7 @@ Servir como herramienta de educación y concienciación sobre la importancia de 
 ## Requisitos previos
 - [ ] Dispositivo fisico o real donde ejecutar la aplicación.
 - [ ] Registro previo del usuario en la plataforma de [Datadis](https://www.datadis.es).
+   - [ ] Diponer de algún suministro a su nombre o ser autorizado.
 - [ ] Acceso a Internet para disponer de conexión a las distintas APIs.
 
 ### Registro en la apliación
