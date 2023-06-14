@@ -60,8 +60,6 @@ class _SuppliesScreenState extends State<SuppliesScreen> {
   return supplies.map((supply) => Supply.fromJson(supply)).toList();
 }
 
-
-
   Future<void> _refresh() async {
     debugPrint('Haciendo refresh');
     

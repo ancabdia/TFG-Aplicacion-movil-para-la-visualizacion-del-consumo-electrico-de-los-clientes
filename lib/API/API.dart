@@ -92,7 +92,7 @@ class API {
         headers: headers);
     return response.statusCode == 200
         ? response.body
-        : throw Exception('Failed to log in');
+        : "";
   }
 
   ///Buscar todos los suministros
