@@ -1,4 +1,6 @@
 # Aplicación móvil para la visualización del consumo eléctrico de los clientes
+ <img src="assets/logo.png?raw=true"  width="20%" height="20%"> 
+
 
 ## Introducción al contexto del proyecto
 ### Descripción/motivación del proyecto
@@ -23,6 +25,25 @@ Servir como herramienta de educación y concienciación sobre la importancia de 
 
 ## Diagramas de caso de uso
 ### Casos de uso: usuario no registrado
-![Diagrama caso de uso usuario no registrado](https://github.com/ancabdia/TFG-Flutter-app-consumos/blob/master/assets/Uusario_no_registrado_diagrama.svg)
+![Diagrama caso de uso usuario no registrado](assets/diagrams/Usario_no_registrado_diagrama.svg)
 ### Casos de uso: usuario registrado
-![Diagrama caso de uso usuario registrado](https://github.com/ancabdia/TFG-Flutter-app-consumos/blob/master/assets/Usuario_registrado_diagrama.svg)
+![Diagrama caso de uso usuario registrado](assets/diagrams/Usuario_registrado_diagrama.svg)
+
+## Resultado final
+### Registro
+![Formulario de registro parte 1](assets/screenshots/register.png?raw=true "Registro de usuario")
+![Formulario de registro parte 2](assets/screenshots/register_2.png?raw=true "Registro de usuario")
+### Login
+![Login](assets/screenshots/login.png?raw=true "Login")
+### Error Login
+![Login](assets/screenshots/error_login.png?raw=true "Error en Login")
+### Inicio
+![Inicio](assets/screenshots/home.png?raw=true "Pagina Inicio")
+### Cambiar idioma
+![Cambiar idioma](assets/screenshots/language.png?raw=true "Cambiar idioma")
+### Ver suministros
+![Ver suministros](assets/screenshots/supplies.png?raw=true "Ver suministros")
+### Ver contrato
+![Ver contrato](assets/screenshots/contract.png?raw=true "Ver contrato")
+### Ver perfil
+![Peril](assets/screenshots/profile.png?raw=true "Perfil de usuario")
