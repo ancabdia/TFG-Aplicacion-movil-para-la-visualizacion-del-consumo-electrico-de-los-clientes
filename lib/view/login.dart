@@ -164,7 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
               onSignup: _signupUser,
               onRecoverPassword: _recoverPassword,
               onConfirmSignup: null,
-              savedEmail: 'andres97carmen@hotmail.es',
+              savedEmail: '',
               savedPassword: '',
             ),
             SafeArea(child: Container(
