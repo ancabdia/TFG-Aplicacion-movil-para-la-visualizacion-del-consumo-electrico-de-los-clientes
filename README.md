@@ -95,7 +95,10 @@ A través de su Perfil puede visualizar la información relativa a su usuario, a
 
 ## Conclusiones finales <a name="id6"></a>
 Introduciendo esta innovadora plataforma móvil, tendrás acceso a la consulta de suministros eléctricos de manera rápida y sencilla, sin importar el proveedor de servicios. Está aplicación móvil, compatible con cualquier dispositivo, ha sido desarrollada para permitir a los usuarios realizar todas las tareas mencionadas en las secciones anteriores.
+
 Pero eso no es todo. 
+
 Este proyecto ha sido una oportunidad de crecimiento personal, adquiriendo conocimientos en el desarrollo móvil con un lenguaje de programación de vanguardia, con una gran demanda en el mercado. Además, ha logrado fortalecer mis habilidades adquiridas a lo largo de la carrera.
+
 En resumen, los objetivos planteados inicialmente han sido cumplidos con éxito, incluso se han agregado nuevas funcionalidades durante el desarrollo para brindar un mayor valor al producto. Y, para futuros proyectos, podríamos seguir mejorando y añadiendo características que brinden aún más utilidad y valor. Incluso considerar la posibilidad de ofrecer esta aplicación de forma gratuita para el público en general una vez se produjera su lanzamiento, con el fin de adquirir una gran fuente de datos.
 
