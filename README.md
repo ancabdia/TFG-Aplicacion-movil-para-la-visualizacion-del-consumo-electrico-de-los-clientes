@@ -31,19 +31,22 @@ Servir como herramienta de educación y concienciación sobre la importancia de 
 
 ## Resultado final
 ### Registro
-![Formulario de registro parte 1](assets/screenshots/register.png?raw=true "Registro de usuario")
-![Formulario de registro parte 2](assets/screenshots/register_2.png?raw=true "Registro de usuario")
+<img src="assets/screenshots/register.png?raw=true"  width="50%" height="50%"> <img src="assets/screenshots/register_2.png?raw=true"  width="50%" height="50%">
+
 ### Login
-![Login](assets/screenshots/login.png?raw=true "Login")
-### Error Login
-![Login](assets/screenshots/error_login.png?raw=true "Error en Login")
-### Inicio
-![Inicio](assets/screenshots/home.png?raw=true "Pagina Inicio")
+<img src="assets/screenshots/login.png?raw=true"  width="50%" height="50%"> <img src="assets/screenshots/error_login.png?raw=true"  width="50%" height="50%">
+
+### Página de Inicio: Visualizar precio PVPC diario
+<img src="assets/screenshots/home.png?raw=true"  width="50%" height="50%">
+
 ### Cambiar idioma
-![Cambiar idioma](assets/screenshots/language.png?raw=true "Cambiar idioma")
+<img src="assets/screenshots/language.png?raw=true"  width="50%" height="50%">
+
 ### Ver suministros
-![Ver suministros](assets/screenshots/supplies.png?raw=true "Ver suministros")
+<img src="assets/screenshots/supplies.png?raw=true"  width="50%" height="50%">
+
 ### Ver contrato
-![Ver contrato](assets/screenshots/contract.png?raw=true "Ver contrato")
+<img src="assets/screenshots/contract.png?raw=true"  width="50%" height="50%">
+
 ### Ver perfil
-![Peril](assets/screenshots/profile.png?raw=true "Perfil de usuario")
+<img src="assets/screenshots/profile.png?raw=true"  width="50%" height="50%">
